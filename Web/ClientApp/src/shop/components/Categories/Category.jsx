@@ -6,24 +6,24 @@ import {openSubMenu} from "utils/actions";
 class Categories extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
       
     };
   }
 
   render() {
+    let rendList = <CategoriesList {...this.props}/>;
     let mobile = (
       <li className="category-button" id="mobile-button" onClick={openSubMenu}>
         <NavLink to="#" onClick={(e) => {e.preventDefault()}}>Каталог товаров</NavLink>
-        <CategoriesList width={this.props.width}/>
+        {rendList}
       </li>
     );
 
     let desktop = (
-      <button id="desktop-button" className="category-button" onClick={this.openCategoryListMobile}>
+      <button id="desktop-button" className="category-button" >
         Каталог товаров
-        <CategoriesList width={this.props.width}/>
+        {rendList}
       </button>
     );
 
@@ -31,11 +31,11 @@ class Categories extends Component {
   }
 }
 
-const mapStateProps = (state) => {
-  console.log(state);
-  return {
-    isOpened: state.categoryReducer.categoryMobileIsOpened
-  };
-}
+// const mapStateProps = (state) => {
+//   console.log(state);
+//   return {
+//     isOpened: state.categoryReducer.categoryMobileIsOpened
+//   };
+// }
 // export default connect(mapStateProps,{ UseCategoryMobile })(Categories);
 export default Categories;

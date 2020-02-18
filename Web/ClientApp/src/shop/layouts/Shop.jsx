@@ -30,7 +30,7 @@ import image from "assets/img/sidebar-3.jpg";
 import ShopNavBar from "../components/Navbar/ShopNavbar.jsx";
 import Main from "shop/views/Main.jsx";
 import {resetMobileMenu} from "utils/actions";
-
+import { withRouter } from "react-router";
 class Shop extends Component {
   constructor(props) {
     super(props);
@@ -149,4 +149,4 @@ class Shop extends Component {
   }
 }
 
-export default Shop;
+export default withRouter(Shop);

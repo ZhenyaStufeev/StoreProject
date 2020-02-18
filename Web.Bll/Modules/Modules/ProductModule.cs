@@ -18,18 +18,19 @@ namespace Web.Bll.Modules.Modules
         {
             db = context;
         }
-        public async Task<IEnumerable<ProductViewModel>> GetProductByCategoryId(int categoryId, int page)
+        public async Task<object> GetProductByCategoryId(int categoryId, int page)
         {
+            //IEnumerable<ProductViewModel>
             return await Task.Run(async () =>
             {
-                var info = Selector.CreateSelector(page);
+                var info = Selector.CreateSelector(page, await db.Products.Where(p => p.CategoryId == categoryId).CountAsync());
+                 
                 var products = db.Products.Where(p => p.CategoryId == categoryId)
                     .Skip(info.beginCount)
                     .Take(info.count);
 
                 var dto = MapService.mapper.Map<IEnumerable<Product>, IEnumerable<ProductViewModel>>(await products.ToArrayAsync());
-
-                return dto;
+                return new { data = dto, totalPages = info.totalPages };
             });
         }
     }

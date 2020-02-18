@@ -12,11 +12,6 @@ class Header extends Component {
     };
   }
 
-  componentDidMount()
-  {
-    console.log("dsfsd");
-  }
-
   mobileSidebarToggle(e) {
     if (this.state.sidebarExists === false) {
       this.setState({

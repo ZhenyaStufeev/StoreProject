@@ -1,7 +1,6 @@
 import Axios from "axios";
 const host = window.location.origin;
 
-
 /*Робота з категориями*/
 
 export function openSubMenu(e) {
@@ -14,12 +13,12 @@ export function openSubMenu(e) {
 
 export function resetMobileMenu() {
   let HTMLItem = document.getElementById("mobile-button");
-  for(let i = 0; i < HTMLItem.children.length; i++)
-  {
-    if(HTMLItem.children[i].className === "category-list")
-    {
-      closeAllOpenedItems(HTMLItem.children[i], true);
-      break;
+  if (HTMLItem != null) {
+    for (let i = 0; i < HTMLItem.children.length; i++) {
+      if (HTMLItem.children[i].className === "category-list") {
+        closeAllOpenedItems(HTMLItem.children[i], true);
+        break;
+      }
     }
   }
 }
@@ -63,27 +62,23 @@ function closeAllOpenedItems(childsArray, isChangeChilds) {
 /* -------------------------------------------------------------------- */
 
 
-
 /* Requests */
-export async function loadCategories()
-{
+export async function loadCategories() {
   let requestHref = host + "/api/Store/getcategories";
   let data = await Axios.get(requestHref);
   return data;
 }
 
-export async function loadProductsByCategoryId(categoryId)
-{
-  let requestHref = host + '/api/Store/getproducts/' + categoryId + '/1';
-  let data = await Axios.get(requestHref);
-  return data;
-}
+// export async function loadProductsByCategoryId(categoryId, page) {
+//   let requestHref = host + "/api/Store/getproducts/" + categoryId + "/" + page;
+//   let data = await Axios.get(requestHref);
+//   return data;
+// }
 // export function getcategories()
 // {
 //   let host = window.location.origin;
 //   let requestHref = host + "/api/Store/getcategories";
 //   Axios.get(requestHref).then(res => {console.log(res)})
 // }
-
 
 /*-------------------------------------------*/

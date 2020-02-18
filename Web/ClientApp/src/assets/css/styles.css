@@ -133,6 +133,7 @@
     position: relative;
     border: 0;
     outline: none;
+    z-index: 1;
   }
   .navbar-default .navbar-nav>.category-button:hover
   /* .navbar-default .navbar-nav>.category-button:focus  */
@@ -310,7 +311,7 @@
 /*Продукти*/
 
 .product-item {
-  width: 300px;
+  width: 200px;
   text-align: center;
   padding: 0px;
   border-bottom: 2px solid #F5F5F5;
@@ -324,6 +325,7 @@
   margin: 0 10px 10px 0;
   text-decoration: none;
   color: #474747;
+  cursor: pointer;
 }
 
 .product-item:hover {
@@ -412,22 +414,91 @@
   justify-content: center;
 }
 
+
+
 @media only screen and (min-width: 450px) {
+  /* .products {
+    max-width: 520px;
+  } */
   .product-wrapper {
     width: 50%;
+    /*50*/
   }
 }
 
 @media only screen and (min-width: 768px) {
+  /* .products {
+    max-width: 780px;
+  } */
   .product-wrapper {
-    width: 33.333%;
+    width: 30%;
+    /*33.333%*/
   }
 }
 
 @media only screen and (min-width: 1000px) {
+  /* .products {
+    max-width: 1000px;
+  } */
   .product-wrapper {
     width: 25%;
+    /*25*/
   }
 }
 
 /*-------------------------------------------------*/
+
+/*Пагинация*/
+
+.react-paginate ul {
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 5px;
+}
+
+.react-paginate li {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 34px;
+  height: 28px;
+  margin: 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 19px;
+  text-align: center;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.selected {
+  background: gray;
+}
+
+.react-paginate a {
+  color: gray;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  outline: none;
+}
+
+.selected a {
+  color: white;
+  font-weight: bold;
+  outline: none;
+}
+
+.react-paginate li:hover {
+  cursor: pointer;
+  border: 1px solid silver;
+  opacity: 0.8;
+}
+
+.react-paginate {}
+
+/*--------------------------------------------------*/

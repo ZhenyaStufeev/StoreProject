@@ -36,6 +36,7 @@ import ShopLayout from "shop/layouts/Shop.jsx";
 import Main from 'shop/views/Main.jsx';
 import { Provider } from "react-redux";
 import rootReducer from "store/rootReducer.jsx"
+import Products from "shop/components/Products/Products";
 
 const store = createStore(
   rootReducer,
@@ -50,7 +51,6 @@ ReactDOM.render(
     <Provider store={store}>
       <Switch>
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
-
         <Route path="/" render={props => <ShopLayout {...props} />} />
         {/* <Route render={props => <Main {...props} />} />   */}
         {/* <Redirect from="/" to="/admin/dashboard" />  document.title = this.props.total; якщо адмінка*/}

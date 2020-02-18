@@ -9,6 +9,6 @@ namespace Web.Bll.Modules.Interfaces
 {
     public interface IProductModule
     {
-        Task<IEnumerable<ProductViewModel>> GetProductByCategoryId(int categoryId, int page);
+        Task<object> GetProductByCategoryId(int categoryId, int page);
     }
 }

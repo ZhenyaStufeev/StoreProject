@@ -9,14 +9,28 @@ namespace Web.Bll.Utils
         private Selector() { }
         public int beginCount { get; set; }
         public int count { get; set; }
+        public int totalPages { get; private set; }
         private static int range = 20;
-        public static Selector CreateSelector(int page)
+        private static object key = new object();
+        public static Selector CreateSelector(int page, int totalItems)
         {
-            Selector selector = new Selector();
-            selector.beginCount = (page * range) - range;
-            selector.count = range;
+            lock (key)
+            {
+                Selector selector = new Selector();
+                selector.beginCount = (page * range) - range;
+                selector.count = range;
 
-            return selector;
+                double drange = range;
+                double dpageCount = totalItems / drange;
+                int ipageCount = totalItems / range;
+
+                if (dpageCount - ipageCount > 0)
+                {
+                    ipageCount++;
+                }
+                selector.totalPages = ipageCount;
+                return selector;
+            }
         }
     }
 }
