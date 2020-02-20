@@ -12,12 +12,16 @@ namespace Web.Bll.Utils
         public int totalPages { get; private set; }
         private static int range = 20;
         private static object key = new object();
+        
         public static Selector CreateSelector(int page, int totalItems)
         {
             lock (key)
             {
                 Selector selector = new Selector();
-                selector.beginCount = (page * range) - range;
+                int usePage = page;
+                usePage = page <= 0 ? 1 : page;
+
+                selector.beginCount = (usePage * range) - range;
                 selector.count = range;
 
                 double drange = range;

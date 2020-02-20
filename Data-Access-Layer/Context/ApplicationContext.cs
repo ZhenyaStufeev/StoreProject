@@ -27,10 +27,10 @@ namespace Data_Access_Layer.Context
         {
             var builder = new ConfigurationBuilder();
             // установка пути к текущему каталогу
-            string Path = Directory.GetCurrentDirectory() + @"\Configuration.json";
+            string Path = Directory.GetCurrentDirectory() + @"\appsettings.json";
             builder.SetBasePath(Directory.GetCurrentDirectory());
             // получаем конфигурацию из файла
-            builder.AddJsonFile("Configuration.json");
+            builder.AddJsonFile("appsettings.json");
             // создаем конфигурацию
             var config = builder.Build();
             // получаем строку подключения

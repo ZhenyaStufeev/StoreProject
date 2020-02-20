@@ -18,6 +18,7 @@ export function loadCategories() {
 
 export function loadProducts(categoryId, page) {
   let host = window.location.origin;
+  // let filtersid = [];
   let requestHref = host + "/api/Store/getproducts/" + categoryId + "/" + page;
   return function(dispatch) {
     return Axios.get(requestHref).then(result => {
@@ -25,7 +26,7 @@ export function loadProducts(categoryId, page) {
       if (result.status === 200) {
         dispatch({
           type: CHANGEOUTPUT,
-          data: {list: result.data.data, categoryId: categoryId, page:page, totalPages: result.data.totalPages}
+          data: {list: result.data.dto, categoryId: categoryId, page:page, totalPages: result.data.totalPages}
         });
       }
     });

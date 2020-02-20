@@ -17,19 +17,32 @@ namespace Business_Layer_Logic.Service
 {
     public class UserService : IUserService
     {
-        public UserManager<ApplicationUser> UserManager_ { get; set; }
-        public RoleManager<ApplicationRole> RoleManager_ { get; set; }
+        public UserManager<ApplicationUser> UserManager { get; set; }
+        public RoleManager<ApplicationRole> RoleManager { get; set; }
         public AuthenticationManager Authentication { get; set; }
         public UserService(UserManager<ApplicationUser> _mn, RoleManager<ApplicationRole> _rm)
         {
-            
-            UserManager_ = _mn;
-            RoleManager_ = _rm;
+            UserManager = _mn;
+            RoleManager = _rm;
         }
         public async Task<bool> Register(RegisterModel model) //Set to AuthenticationManager
         {
-            ApplicationUser user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
-            IdentityResult result = await UserManager_.CreateAsync(user, model.Password);
+            if (model.Password != model.ConfirmPassword)
+                return false;
+
+            string uName = "";
+            if (model.UserName == null && model.UserName.Length <= 0)
+            {
+                foreach (char symbol in model.Email)
+                {
+                    if (symbol == '@')
+                        break;
+                    uName += symbol;
+                }
+            }
+
+            ApplicationUser user = new ApplicationUser() { UserName = uName, Email = model.Email };
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
@@ -49,28 +62,22 @@ namespace Business_Layer_Logic.Service
         }
         public async Task<object> Login(LoginModel model) //Set to AuthenticationManager
         {
-            var user = await UserManager_.FindByEmailAsync(model.Email);
-
+            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return new { succeeded = false, errors = new object[] { "LOGIN_NOT_FOUND" } };
+
+            bool passIsCorrect = await UserManager.CheckPasswordAsync(user, model.Password);
+            if (!passIsCorrect)
+                return new { succeeded = false, errors = new object[] { "INCORRECT_PASSWORD" } };
 
             user.SecurityStamp = CreateToken(user);
             UserInfo user_dt = new UserInfo()
             {
                 Email = user.Email,
+                DisplayName = user.UserName,
                 Token = user.SecurityStamp
             };
 
-            if (user.Name == null) //Костиль
-            {
-                user_dt.DisplayName = "";
-                foreach (char symbol in user.Email)
-                {
-                    if (symbol == '@')
-                        break;
-                    user_dt.DisplayName += symbol;
-                }
-            }
             return new { succeeded = true, user_dt };
         }
         private string CreateToken(ApplicationUser user)
@@ -88,7 +95,7 @@ namespace Business_Layer_Logic.Service
                 SigningCredentials = new SigningCredentials(AppSettings.SymmetricKey(), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            
+
             var securityStamp = tokenHandler.WriteToken(token);
             // remove password before returning
             user.PasswordHash = null;

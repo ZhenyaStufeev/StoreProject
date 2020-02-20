@@ -6,7 +6,7 @@
 
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=scp.realhost.com.ua;Initial Catalog=storedatabase;User ID=zhenya; Password=m*mIhBRz^kV0eYfu9I%; Integrated Security=false;Trusted_Connection=False;"
+    "DefaultConnection": "Data Source=scp.realhost.com.ua;Initial Catalog=storedatabase;User ID=zhenya; Password=m*mIhBRz^kV0eYfu9I%; Integrated Security=false;Trusted_Connection=False; MultipleActiveResultSets=true"
   }
 }
 

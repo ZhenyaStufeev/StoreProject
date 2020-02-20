@@ -10,5 +10,6 @@ namespace Web.Bll.Entities
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string Captcha { get; set; }
+        public string UserName { get; set; }
     }
 }

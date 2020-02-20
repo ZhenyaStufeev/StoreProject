@@ -20,10 +20,26 @@ import { Grid, Row, Col } from "react-bootstrap";
 import Axios from "axios";
 
 class Main extends Component {
+  send() {
+    Axios.post("https://localhost:44330/api/Account/login", {
+      Email: "zhenyastufeev09012001@gmail.com",
+      Password: "fdgdfhgdfg",
+      ConfirmPassword: "gsdfgfdg"
+    });
+  }
+
+  reg()
+  {
+    Axios.post("https://localhost:44330/api/Account/register", {
+      Email: "zhenyastufeev09012001@gmail.com",
+      Password: "fdgdfhgdfg",
+      ConfirmPassword: "gsdfgfdg"
+    });
+  }
   render() {
     return (
       <div className="">
-        Hello
+        <button onClick={this.send}>Login</button>
       </div>
     );
   }

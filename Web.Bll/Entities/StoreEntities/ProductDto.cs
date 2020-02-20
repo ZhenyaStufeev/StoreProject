@@ -20,5 +20,6 @@ namespace Web.Bll.Entities.StoreEntities
         public DateTime DateCreate { get; set; }
         //public virtual IQueryable<FilterViewModel> Filters { get; set; }
         public string ImagePath { get; set; }
+
     }
 }

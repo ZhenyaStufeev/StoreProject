@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Business_Layer_Logic.Entities.Shop
+namespace Web.Bll.Entities.StoreEntities
 {
     public class FValueViewItem
     {

@@ -27,14 +27,14 @@ namespace Web.Controllers
         [HttpGet("getcategories")]
         public async Task<IActionResult> GetCategories()
         {
-            var result = await store.categoryModule.Get();
+            var result = await store.GetCategories();
             return Ok(result);
         }
 
         [HttpGet("getproducts/{categoryid}/{page}")]
         public async Task<IActionResult> GetProducts(int categoryid, int page)
         {
-            var res = await store.productModule.GetProductByCategoryId(categoryid, page);
+            var res = await store.GetProduct(categoryid, page, null);
             return Ok(res);
         }
 

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Web.Bll.Modules.Interfaces;
+using System.Threading.Tasks;
+using Web.Bll.Entities.StoreEntities;
 
 namespace Web.Bll.Interfaces
 {
     public interface IStoreService : IDisposable
     {
-        ICategoryModule categoryModule { get; }
-        IProductModule productModule { get; }
+        Task<IEnumerable<CategoryViewModel>> GetCategories();
+        Task<object> GetProduct(int categoryId, int page, int[] filtersId);
     }
 }
