@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Web.Bll.Entities.StoreEntities;
 using Web.Bll.Interfaces;
+using Web.Entities;
 
 namespace Web.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     //[ApiController]
     [Produces("application/json")]
     [Route("api/Store")]
@@ -32,9 +35,17 @@ namespace Web.Controllers
         }
 
         [HttpGet("getproducts/{categoryid}/{page}")]
-        public async Task<IActionResult> GetProducts(int categoryid, int page)
+        [HttpPost("getproducts")]
+        public async Task<IActionResult> GetProducts([FromBody]ProductsRequest data)
         {
-            var res = await store.GetProduct(categoryid, page, null);
+            var res = await store.GetProduct(data.categoryid, data.page, data.filtersId);
+            return Ok(res);
+        }
+
+        [HttpGet("getfiltersbycategoryid/{categoryid}")]
+        public async Task<IActionResult> GetFiltersByCategoryId(string categoryId)
+        {
+            var res = await store.GetFiltersByCategoryId(categoryId);
             return Ok(res);
         }
 

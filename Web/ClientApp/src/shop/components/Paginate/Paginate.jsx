@@ -10,11 +10,10 @@ class Paginate extends Component {
 
   handlePageClick(e) {
     window.location.hash = e.selected+1;
-    // console.log(window.location);
-    // alert(window.location.hash.slice(1));
   }
 
   render() {
+    var current = this.props.currentPage-1;
     return (
       <div className="react-paginate">
         <ReactPaginate
@@ -23,17 +22,17 @@ class Paginate extends Component {
           previousLabel="<"
           nextLabel=">"
           onPageChange={this.handlePageClick}
+          forcePage={current}
         />
       </div>
     );
   }
 }
 
-// export default Paginate;
 const mapStateProps = (state) => {
-  console.log(state);
   return {
-    totalPages: state.productReducer.totalPages
+    totalPages: state.productReducer.totalPages,
+    currentPage: state.productReducer.page
   };
 }
 

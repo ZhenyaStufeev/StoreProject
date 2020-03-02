@@ -12,13 +12,11 @@ namespace Web.Bll.Entities.StoreEntities
             DateCreate = DateTime.Now;
         }
         public int Id { get; set; }
-        public CategoryViewModel category { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
         public string Description { get; set; }
         public int Quantity { get; set; }
         public DateTime DateCreate { get; set; }
-        //public virtual IQueryable<FilterViewModel> Filters { get; set; }
         public string ImagePath { get; set; }
 
     }

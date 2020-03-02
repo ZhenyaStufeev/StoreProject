@@ -75,8 +75,8 @@ class CategoriesList extends Component {
 }
 const mapStateProps = (state) => {
   return {
-    listIsLoaded: state.categoryReducer.isLoaded,
-    categoryList: state.categoryReducer.data
+    listIsLoaded: state.productReducer.categoriesIsLoaded,
+    categoryList: state.productReducer.categoryList
   };
 }
 

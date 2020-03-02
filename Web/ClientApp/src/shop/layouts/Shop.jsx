@@ -31,6 +31,7 @@ import ShopNavBar from "../components/Navbar/ShopNavbar.jsx";
 import Main from "shop/views/Main.jsx";
 import {resetMobileMenu} from "utils/actions";
 import { withRouter } from "react-router";
+import Filter from 'shop/components/Filter/Filter';
 class Shop extends Component {
   constructor(props) {
     super(props);
@@ -123,10 +124,9 @@ class Shop extends Component {
     }
   };
   render() {
-
     return (
       <div className="wrapper">
-        <div id="--open" className=""/>
+        {(this.state.width <= 991) ? <Filter/>: ''} 
         <Sidebar
           {...this.props}
           width={this.state.width}

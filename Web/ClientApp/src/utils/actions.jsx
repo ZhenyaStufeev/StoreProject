@@ -69,16 +69,31 @@ export async function loadCategories() {
   return data;
 }
 
-// export async function loadProductsByCategoryId(categoryId, page) {
-//   let requestHref = host + "/api/Store/getproducts/" + categoryId + "/" + page;
-//   let data = await Axios.get(requestHref);
-//   return data;
-// }
-// export function getcategories()
-// {
-//   let host = window.location.origin;
-//   let requestHref = host + "/api/Store/getcategories";
-//   Axios.get(requestHref).then(res => {console.log(res)})
-// }
+export function getData()
+{  
+  let hash = window.location.hash.slice(1);
+  let search = window.location.search.slice(1);
 
-/*-------------------------------------------*/
+  if(hash === "" || hash == null)
+    hash = '1';
+
+  hash = parseInt(hash);
+
+  if(search == null)
+    search = ''
+  
+  let data = {page: hash, categoryId: search};
+  return data
+}
+
+export function getCategoryNameById(categoryId, categoryList)
+{
+  let categoryName = "";
+  categoryList.forEach(item => {
+    if(item.id.toString() === categoryId)
+    {
+      categoryName = item.name;
+    }
+  });
+  return categoryName;
+}
