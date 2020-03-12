@@ -537,7 +537,7 @@ body > .navbar-collapse[data-color="purple"]:after {
     border-top-color: #3472F7; }
 
 .btn-success {
-  border-color: #87CB16;
+  border-color: #87CB16; 
   color: #87CB16; }
   .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active,
   .open > .btn-success.dropdown-toggle {

@@ -9,7 +9,8 @@ namespace Web.Bll.Interfaces
     public interface IStoreService : IDisposable
     {
         Task<IEnumerable<CategoryViewModel>> GetCategories();
-        Task<object> GetProduct(string categoryId, int page, string[] filtersId);
+        Task<object> GetProduct(ProductRequest model);
         Task<IEnumerable<FNameViewModel>> GetFiltersByCategoryId(string id);
+        Task<SelectedProduct> GetProductById(string Id);
     }
 }

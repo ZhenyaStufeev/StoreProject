@@ -1,5 +1,12 @@
 import Axios from "axios";
-import { CHANGEOUTPUT, GETCATEGORY, LOADFILTERS, UPDATECURRENTCATEGORY, TRYOPENFILTER } from "store/types.jsx";
+import { CHANGEOUTPUT,
+   GETCATEGORY,
+    LOADFILTERS,
+     UPDATECURRENTCATEGORY,
+      TRYOPENFILTER,
+       CHANGERORDERTYPE,
+        CHANGECURRENTPRICE,
+         CONTROLAUTH } from "store/types.jsx";
 import {getData} from './actions';
 
 export function loadCategories() {
@@ -17,7 +24,8 @@ export function loadCategories() {
   };
 }
 
-export function loadProducts(filtersid) {
+export function loadProducts(filtersid, minPrice, maxPrice, orderType) {
+  console.log(minPrice, maxPrice);
   let host = window.location.origin;
   let requestHref = host + "/api/Store/getproducts";
   let data = getData();
@@ -25,8 +33,12 @@ export function loadProducts(filtersid) {
     return Axios.post(requestHref, {
       categoryid: data.categoryId,
       page: data.page,
-      filtersId: filtersid
+      filtersId: filtersid,
+      minPrice,
+      maxPrice,
+      orderType
     }).then(result => {
+
       if (result.status === 200) {
         dispatch({
           type: CHANGEOUTPUT,
@@ -34,7 +46,12 @@ export function loadProducts(filtersid) {
             list: result.data.dto,
             categoryId: data.categoryId,
             page: data.page,
-            totalPages: result.data.totalPages
+            totalPages: result.data.totalPages,
+            maxPrice: result.data.maxPrice,
+            minPrice: result.data.minPrice,
+            selectedFilters: filtersid,
+            // currentMinPrice: result.data.minPrice,
+            // currentMaxPrice: result.data.maxPrice
           }
         });
       }
@@ -73,6 +90,44 @@ export function TryOpenFilters(isOpen) {
     return dispatch({
           type: TRYOPENFILTER,
           data: isOpen
+        });
+      }
+}
+
+export function ChangeOrderType(orderType) {
+  return function(dispatch) {
+    return dispatch({
+          type: CHANGERORDERTYPE,
+          orderType: orderType
+        });
+      }
+}
+
+export function updateSelectedFilters(filtersId) {
+  return function(dispatch) {
+    return dispatch({
+          type: UPDATECURRENTCATEGORY,
+          data: filtersId
+        });
+      }
+}
+
+export function updateCurrentPrice(minPrice, maxPrice) {
+  return function(dispatch) {
+    return dispatch({
+          type: CHANGECURRENTPRICE,
+          currentMinPrice: minPrice,
+          currentMaxPrice: maxPrice
+        });
+      }
+}
+
+export function openAuth(isOpen, typeAuth) {
+  return function(dispatch) {
+    return dispatch({
+          type: CONTROLAUTH,
+          typeAuth: typeAuth,
+          authIsOpen: isOpen
         });
       }
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Navbar } from "react-bootstrap";
 
 import ShopNavbarLinks from "./ShopNavbarLinks.jsx";
-
+import {resetMobileMenu} from "utils/actions";
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -25,13 +25,14 @@ class Header extends Component {
     node.onclick = function() {
       this.parentElement.removeChild(this);
       document.documentElement.classList.toggle("nav-open-mobile");
+      // resetMobileMenu();
     };
     document.body.appendChild(node);
   }
 
   render() {
     return (
-      <Navbar fluid>
+      <Navbar fluid style={{paddingLeft:"20px", paddingRight:"20px"}}>
         <Navbar.Header>
           <Navbar.Brand>
             <a href="#pablo">{this.props.brandText}</a>

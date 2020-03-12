@@ -15,4 +15,10 @@
         public int[] filtersId { get; set; }
         int page { get; set; }
     }
+
+    public class PropsView
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
 }

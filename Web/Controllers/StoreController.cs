@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Web.Bll.Entities.StoreEntities;
 using Web.Bll.Interfaces;
-using Web.Entities;
 
 namespace Web.Controllers
 {
@@ -36,25 +35,25 @@ namespace Web.Controllers
 
         [HttpGet("getproducts/{categoryid}/{page}")]
         [HttpPost("getproducts")]
-        public async Task<IActionResult> GetProducts([FromBody]ProductsRequest data)
+        public async Task<IActionResult> GetProducts([FromBody]ProductRequest data)
         {
-            var res = await store.GetProduct(data.categoryid, data.page, data.filtersId);
+            var res = await store.GetProduct(data);
             return Ok(res);
         }
 
         [HttpGet("getfiltersbycategoryid/{categoryid}")]
+        [HttpGet("getfiltersbycategoryid")]
         public async Task<IActionResult> GetFiltersByCategoryId(string categoryId)
         {
             var res = await store.GetFiltersByCategoryId(categoryId);
             return Ok(res);
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
+        [HttpGet("getproduct/{productId}")]
+        public async Task<IActionResult> GetProduct(string productId)
         {
-            var result = "Hello";
-            return Ok(result);
+            var res = await store.GetProductById(productId);
+            return Ok(res);
         }
-
     }
 }

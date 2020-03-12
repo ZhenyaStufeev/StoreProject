@@ -3,9 +3,10 @@ import { NavLink, Link, Redirect, Router, Route } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { NavItem, Nav, NavDropdown, MenuItem } from "react-bootstrap";
-import { openSubMenu } from "utils/actions";
+import { openSubMenu, closeSidebar } from "utils/actions";
 import { loadCategories } from "utils/storecontrol";
 import { withRouter } from "react-router";
+import { resetMobileMenu } from "utils/actions";
 class CategoriesList extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,6 @@ class CategoriesList extends Component {
   }
 
 
-
   renderItems() {
     let renderList = this.props.categoryList.map(item => {
       return this.getItems(item);
@@ -38,7 +38,7 @@ class CategoriesList extends Component {
       let ref = "/products?" + item.id;
       let temp = (
           <li key={item.id}>
-            <NavLink to={ref}>
+            <NavLink to={ref} onClick={closeSidebar}>
               <p>{item.name}</p>
             </NavLink>
           </li>

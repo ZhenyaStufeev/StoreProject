@@ -36,11 +36,22 @@ namespace Web.Bll.Services
                 return result;
             });
         }
-        public async Task<object> GetProduct(string categoryId, int page, string[] filtersId)
+        public async Task<object> GetProduct(ProductRequest model)
         {
-            IQueryable<Product> query = (categoryId == null || categoryId.Length <= 0) ? db.Products : db.Products.Where(p => p.CategoryId.ToString() == categoryId);
+            //(model.categoryId == null || model.categoryId.Length <= 0) ? db.Products : db.Products.Where(p => p.CategoryId.ToString() == model.categoryId);
+            IQueryable<Product> query = db.Products;
 
-            if (filtersId != null && filtersId.Length > 0) //Якщо є вхідні фільтри
+            if (model.categoryId != null && model.categoryId.Length > 0)
+                query = query.Where(p => p.CategoryId.ToString() == model.categoryId);
+
+            double maxPrice = await query.MaxAsync(p => p.Price);
+            double minPrice = await query.MinAsync(p => p.Price);
+
+            if (model.maxPrice != model.minPrice && model.maxPrice != 0)
+                query = query.Where(p => p.Price >= model.minPrice && p.Price <= model.maxPrice);
+
+
+            if (model.filtersId != null && model.filtersId.Length > 0) //Якщо є вхідні фільтри
             {
                 IEnumerable<FNameViewModel> FilterList = GetFilters(); //Отримати всі фільтри (Query);
                 foreach (FNameViewModel fName in FilterList)
@@ -49,7 +60,7 @@ namespace Web.Bll.Services
                     var Predicate = PredicateBuilder.False<Product>();
                     foreach (var fVale in fName.Childrens)
                     {
-                        foreach (var FilterId in filtersId)
+                        foreach (var FilterId in model.filtersId)
                         {
                             var ValueId = fVale.Id;
                             if (FilterId == ValueId.ToString())
@@ -81,31 +92,52 @@ namespace Web.Bll.Services
                    Quantity = fProducts.Quantity,
                    ImagePath = fProducts.ImagePath
                });
+            if(model.orderType != null)
+                FilteredProducts = SetPriceSort(FilteredProducts, model.orderType);
 
-            var info = Selector.CreateSelector(page, await FilteredProducts.CountAsync());
+            var info = Selector.CreateSelector(model.page, await FilteredProducts.CountAsync());
 
             FilteredProducts = FilteredProducts.Skip(info.beginCount)
                                .Take(info.count);
 
-            return new { dto = FilteredProducts, totalPages = info.totalPages };
+            return new { dto = FilteredProducts, totalPages = info.totalPages, minPrice, maxPrice };
+        }
+
+        private IQueryable<ProductViewModel> SetPriceSort(IQueryable<ProductViewModel> FilteredProducts, string sorttype)
+        {
+            switch (sorttype)
+            {
+                case "highttolow":
+                    {
+                        return FilteredProducts.OrderByDescending(p => p.Price);
+                    }
+                case "lowtohight":
+                    {
+                        return FilteredProducts.OrderBy(p => p.Price);
+                    }
+                default:
+                    {
+                        return FilteredProducts;
+                    }
+            }
         }
 
         public async Task<IEnumerable<FNameViewModel>> GetFiltersByCategoryId(string id)
         {
-            var query = db.Products.Where(pr => pr.CategoryId.ToString() == id)
-                                         .SelectMany(pr_f => pr_f.Filters)
-                                         .Select(pr_f => new 
-                                         { 
-                                             FNameId = pr_f.FilterNameId, 
-                                             FName = pr_f.FilterNameOf.Name, 
-                                             FValueId = pr_f.FilterValueId,
-                                             FValue = pr_f.FilterValueOf.Name
-                                         });
+            IQueryable<Product> query_pr = id != null && id.Length > 0 ? db.Products.Where(pr => pr.CategoryId.ToString() == id) : db.Products;
+            var query = query_pr.SelectMany(pr_f => pr_f.Filters)
+                                .Select(pr_f => new
+                                {
+                                    FNameId = pr_f.FilterNameId,
+                                    FName = pr_f.FilterNameOf.Name,
+                                    FValueId = pr_f.FilterValueId,
+                                    FValue = pr_f.FilterValueOf.Name
+                                });
 
             var groups = query.GroupBy(filter => (new { Id = filter.FNameId, Name = filter.FName }))
                               .OrderBy(x => x.Key.Name);
 
-            var result = await Task.Run(() => 
+            var result = await Task.Run(() =>
             {
                 List<FNameViewModel> FilterList = new List<FNameViewModel>();
 
@@ -167,6 +199,36 @@ namespace Web.Bll.Services
 
             return FilterList;
         }
+
+        public async Task<SelectedProduct> GetProductById(string Id)
+        { 
+
+
+            var productQuery = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == Id);
+
+            SelectedProduct prdto = new SelectedProduct()
+            {
+                Id = productQuery.Id,
+                Name = productQuery.Name,
+                ImagePath = productQuery.ImagePath,
+                Price = productQuery.Price,
+                Description = productQuery.Description
+            };
+
+            var filterQuery = db.Filters.Where(f => f.ProductId.ToString() == Id)
+                                        .Include(f => f.FilterValueOf)
+                                        .Include(f => f.FilterNameOf);
+
+            prdto.Props = filterQuery.Select(f => new PropsView()
+                                      {
+                                          Name = f.FilterNameOf.Name,
+                                          Value = f.FilterValueOf.Name
+                                      }).ToList();
+
+
+            return prdto;
+        }
+
         #region Dispose
         bool disposed = false;
         // Public implementation of Dispose pattern callable by consumers.

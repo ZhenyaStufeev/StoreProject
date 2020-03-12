@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { NavLink, Link, Switch, Route } from "react-router-dom";
 import { NavItem, Nav, NavDropdown, MenuItem } from "react-bootstrap";
-import { loadProducts, loadFilters, updateCategoryName } from "utils/storecontrol";
+import {
+  loadProducts,
+  loadFilters,
+  updateCategoryName
+} from "utils/storecontrol";
 import { getCategoryNameById } from "utils/actions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -18,31 +22,37 @@ class Products extends Component {
     this.updateData = this.updateData.bind(this);
   }
 
-  updateData = () =>
-  {
+  updateData = () => {
     if (this.state.isLoading === false) {
       this.setState({ isLoading: true });
-      this.props.loadProducts(this.state.selectedFilters);
+      this.props.loadProducts(
+        this.props.selectedFilters,
+        this.props.currentMinPrice,
+        this.props.currentMaxPrice,
+        this.props.orderType
+      );
       let filtersLoaded = this.state.filtersLoaded;
-      if(filtersLoaded === false)
-      {
+      if (filtersLoaded === false) {
         this.props.loadFilters();
         filtersLoaded = true;
       }
       this.setState({ isLoading: false, filtersIsLoaded: filtersLoaded });
     }
-  }
+  };
 
-  componentDidUpdate(prevProps)
-  {  
-    if(this.props.categoryList.length > 0)
-    {
-      let categoryname = getCategoryNameById(this.props.categoryId, this.props.categoryList);
-      if(categoryname != null && categoryname.length > 0)
+  componentDidUpdate(prevProps) {
+    if (this.props.categoryList.length > 0) {
+      let categoryname = getCategoryNameById(
+        this.props.categoryId,
+        this.props.categoryList
+      );
+      if (categoryname != null && categoryname.length > 0)
         this.props.updateCategoryName(categoryname);
     }
-    if((prevProps.location.search !== this.props.history.location.search || prevProps.location.hash !== this.props.history.location.hash))
-    {   
+    if (
+      prevProps.location.search !== this.props.history.location.search ||
+      prevProps.location.hash !== this.props.history.location.hash
+    ) {
       this.updateData();
     }
   }
@@ -58,22 +68,25 @@ class Products extends Component {
       content.push(
         <li className="product-wrapper" key={i}>
           <div className="product-item">
-            <div className="product-photo">
-              <img
-                src={item.imagePath}
-                alt="ASP.NET"
-                className="img-responsive"
-              />
-            </div>
+            <Link to={"sproduct?" + item.id}>
+              <div className="product-photo">
+                <img
+                  src={item.imagePath}
+                  alt="ASP.NET"
+                  className="img-responsive"
+                />
+              </div>
+            </Link>
             <div className="product-list">
-              <p>{item.name}</p>
+              <Link to={"sproduct?" + item.id}>
+                <p style={{color: 'black'}}>{item.name}</p>
+              </Link>
               <span className="price">{item.price} грн</span>
-              <button href="" className="item-button">
+              <Link to={"sproduct?" + item.id} className="item-button">
                 В корзину
-              </button>
+              </Link>
             </div>
-            <div className="more-info">
-            </div>
+            <div className="more-info"></div>
           </div>
         </li>
       );
@@ -84,15 +97,14 @@ class Products extends Component {
   render() {
     return (
       <div>
-        <div className={this.state.isLoading === true ? "--open-side" : ""}/>
-        {this.props.selectedFilters}
+        <div className={this.state.isLoading === true ? "--open-side" : ""} />
         <ol className="products" style={{ marginRight: "10px" }}>
           {this.renderItems()}
         </ol>
         <div>
-            <hr className="hr-horizontal-line" />
-            <Paginate />
-          </div>
+          <hr className="hr-horizontal-line" />
+          <Paginate />
+        </div>
       </div>
     );
   }
@@ -102,10 +114,18 @@ class Products extends Component {
 const mapStateProps = state => {
   return {
     productList: state.productReducer.productList,
-    categoryId:state.productReducer.categoryId,
+    categoryId: state.productReducer.categoryId,
     categoryList: state.productReducer.categoryList,
-    currentCategoryName: state.productReducer.currentCategoryName
+    currentCategoryName: state.productReducer.currentCategoryName,
+    orderType: state.productReducer.orderType,
+    currentMaxPrice: state.productReducer.currentMaxPrice,
+    currentMinPrice: state.productReducer.currentMinPrice,
+    selectedFilters: state.productReducer.selectedFilters
   };
 };
 
-export default withRouter(connect(mapStateProps, { loadProducts, loadFilters, updateCategoryName })(Products));
+export default withRouter(
+  connect(mapStateProps, { loadProducts, loadFilters, updateCategoryName })(
+    Products
+  )
+);

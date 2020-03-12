@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Light Bootstrap Dashboard React - v1.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import NotificationSystem from "react-notification-system";
@@ -32,6 +15,7 @@ import Main from "shop/views/Main.jsx";
 import {resetMobileMenu} from "utils/actions";
 import { withRouter } from "react-router";
 import Filter from 'shop/components/Filter/Filter';
+import LoginModal from "account/components/Login/Login";
 class Shop extends Component {
   constructor(props) {
     super(props);
@@ -126,6 +110,7 @@ class Shop extends Component {
   render() {
     return (
       <div className="wrapper">
+        <LoginModal/>
         {(this.state.width <= 991) ? <Filter/>: ''} 
         <Sidebar
           {...this.props}
