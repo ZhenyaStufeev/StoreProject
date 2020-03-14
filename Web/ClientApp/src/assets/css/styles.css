@@ -1520,3 +1520,128 @@
   margin:5px !important;
 }
 
+.shoping-catr
+{
+  outline:none;
+  top: -1.6px !important;
+}
+
+.notification-text
+{
+  margin-left: 5px;
+}
+
+.cart-items
+{
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  flex-direction: column;
+  border: 0.5px solid silver;
+  border-radius: 5px;
+}
+
+.cart-item
+{
+  display: flex;
+  padding: 5px;
+  border: 0.5px solid silver;
+  border-radius: 5px;
+  min-height: 50px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.cart-del-bt
+{
+  cursor: pointer;
+  position: absolute;
+}
+
+.cart-del-bt:hover, 
+.cart-del-bt:focus
+{
+  opacity: 0.6;
+}
+
+.cart-content
+{
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.cart-content img
+{
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.cart-price
+{
+  display: flex;
+  justify-content: start;
+}
+.cart-price > p
+{
+  border: 0.5px solid silver;
+  padding: 8px 12px 8px 12px;
+  border-radius: 5px;
+  height: 40px;
+}
+
+.cart-count
+{
+  display: flex;
+  justify-content: left;
+  width: 100px;
+}
+
+.cart-current-price
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 22px;
+  align-items: center;
+}
+
+.cart-dt
+{
+  display: flex;
+  margin-top:22px;
+  flex-direction: column;
+}
+
+.cart-t
+{
+  max-width: 350px;
+}
+
+.cart-total
+{
+  right:0px;
+  align-self: flex-end;
+  padding: 20px;
+}
+
+.pay-info
+{
+  border:0.5px solid silver;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.select-city
+{
+  max-width: 350px;
+}
+
+.user-pay-info
+{
+  max-width: 350px;
+}

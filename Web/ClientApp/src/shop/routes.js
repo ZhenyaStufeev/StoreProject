@@ -1,5 +1,6 @@
 import ProductsList from "shop/views/ProductsList"
 import SelectedProduct from "shop/views/SelectedProduct"
+import ShopingCart from "shop/views/ShopingCart"
 const dashboardRoutes = [
   {
     path: "/products*",
@@ -13,6 +14,13 @@ const dashboardRoutes = [
     name: "Продукт",
     icon: "pe-7s-bookmarks",
     component: SelectedProduct,
+    layout: ""
+  },
+  {
+    path: "/shopingcart*",
+    name: "Корзина",
+    icon: "pe-7s-bookmarks",
+    component: ShopingCart,
     layout: ""
   }
 ];

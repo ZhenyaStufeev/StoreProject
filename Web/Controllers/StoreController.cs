@@ -55,5 +55,12 @@ namespace Web.Controllers
             var res = await store.GetProductById(productId);
             return Ok(res);
         }
+
+        [HttpPost("getproductstocart")]
+        public async Task<IActionResult> GetProductsToCart([FromBody]string[] productsId)
+        {
+            var res = await store.GetProductByIds(productsId);
+            return Ok(res);
+        }
     }
 }

@@ -6,6 +6,10 @@ import { CHANGEOUTPUT,
       TRYOPENFILTER,
        CHANGERORDERTYPE,
         CHANGECURRENTPRICE,
+        SETTOCART,
+        SETIDSPRODUCTS,
+        ADDID,
+        UPDATEQUANTITY,
          CONTROLAUTH } from "store/types.jsx";
 import {getData} from './actions';
 
@@ -25,8 +29,8 @@ export function loadCategories() {
 }
 
 export function loadProducts(filtersid, minPrice, maxPrice, orderType) {
-  console.log(minPrice, maxPrice);
   let host = window.location.origin;
+
   let requestHref = host + "/api/Store/getproducts";
   let data = getData();
   return function(dispatch) {
@@ -132,4 +136,44 @@ export function openAuth(isOpen, typeAuth) {
       }
 }
 
+
+export function SetDataToCart(items) {
+  return function(dispatch) {
+    return dispatch({
+          type: SETTOCART,
+          cartList: items
+        });
+      }
+}
+
+export function SetProductsIds(ids) {
+  return function(dispatch) {
+    return dispatch({
+          type: SETIDSPRODUCTS,
+          prIds: ids
+        });
+      }
+}
+
+export function AddIdToCart(id)
+{
+  return function(dispatch) {
+    return dispatch({
+          type: ADDID,
+          Id:id
+        });
+      }
+}
+
+
+export function UpdateOroductQuantity(id, value)
+{
+  return function(dispatch) {
+    return dispatch({
+          type: UPDATEQUANTITY,
+          id:id,
+          value: value
+        });
+      }
+}
 /* --------------------------------------------------------- */

@@ -229,6 +229,25 @@ namespace Web.Bll.Services
             return prdto;
         }
 
+        public async Task<IEnumerable<ProductViewModel>> GetProductByIds(string[] ids)
+        {
+            if (ids != null)
+            {
+                if (ids.Length > 0)
+                {
+                    return await db.Products.Where(p => ids.Any(id => id == p.Id.ToString())).Select(p => new ProductViewModel
+                    {
+                        Name = p.Name,
+                        Id = p.Id,
+                        ImagePath = p.ImagePath,
+                        Price = p.Price,
+                        Quantity = p.Quantity,
+                    }).ToListAsync();
+                }
+            }
+            return new List<ProductViewModel>();
+        }
+
         #region Dispose
         bool disposed = false;
         // Public implementation of Dispose pattern callable by consumers.

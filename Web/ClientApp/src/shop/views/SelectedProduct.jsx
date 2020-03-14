@@ -8,7 +8,8 @@ import { connect } from "react-redux";
 import {
   TryOpenFilters,
   loadProducts,
-  ChangeOrderType
+  ChangeOrderType,
+  AddIdToCart
 } from "utils/storecontrol";
 import Select from "react-select";
 import Axios from "axios";
@@ -58,8 +59,8 @@ class SelectedProduct extends Component {
           <img src={this.state.imagePath} className="spr-selected-image" />
           <div className="pr-info">
             <div className="price-block">
-              5325 грн.
-              <button className="btn btn-success pr-bt ">
+              {this.state.price} грн.
+              <button className="btn btn-success pr-bt " onClick={() => this.props.AddIdToCart(this.state.id)}>
                 <div className="pe-7s-wallet" />В корзину
               </button>
             </div>
@@ -105,4 +106,4 @@ const mapStateProps = state => {
   return {};
 };
 
-export default connect(mapStateProps, {})(SelectedProduct);
+export default connect(mapStateProps, {AddIdToCart})(SelectedProduct);

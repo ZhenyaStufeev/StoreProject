@@ -25,7 +25,6 @@ class Header extends Component {
     node.onclick = function() {
       this.parentElement.removeChild(this);
       document.documentElement.classList.toggle("nav-open-mobile");
-      // resetMobileMenu();
     };
     document.body.appendChild(node);
   }

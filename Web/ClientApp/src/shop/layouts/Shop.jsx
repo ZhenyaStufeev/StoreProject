@@ -122,7 +122,7 @@ class Shop extends Component {
         />
 
         <div className="main-shop" id="main-panel" ref="mainPanel">
-          <ShopNavBar width={this.state.width} {...this.props}/>
+          <ShopNavBar width={this.state.width} {...this.props} />
           <div> {/*body components*/}
             {this.props.history.location.pathname === "/" ? <Main /> : ""}
             <Switch>{this.getRoutes(routes)}</Switch>

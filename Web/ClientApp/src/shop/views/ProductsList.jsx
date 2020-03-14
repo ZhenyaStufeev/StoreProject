@@ -35,7 +35,7 @@ class ProductsList extends Component {
         <hr />
         <button
           type="button"
-          class="btn btn-outline-secondary"
+          className="btn btn-outline-secondary"
           onClick={e => this.props.TryOpenFilters()}
         >
           Фильтр

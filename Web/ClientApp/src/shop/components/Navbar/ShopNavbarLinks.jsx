@@ -22,13 +22,22 @@ class ShopNavbarLinks extends Component {
   }
 
   render() {
+    const notification = (
+      <div className="">
+        <i className="fa pe-7s-wallet" />
+          {this.props.width >= 991 && this.props.orderItems > 0 ? <span className="notification">{this.props.orderItems}</span> : ""} 
+        <span className="notification-text">Корзина</span>
+      </div>
+    );
     return (
+      
       <div>
         <Nav>
           <Categories {...this.props} />
         </Nav>
 
-        <Nav pullRight>
+        <ul className="nav navbar-nav navbar-right">
+          <li role="presentation"><NavLink className="shoping-catr" to="/shopingcart">{notification}</NavLink></li>
           <NavDropdown
             eventKey={2}
             title="Личный кабинет"
@@ -37,13 +46,15 @@ class ShopNavbarLinks extends Component {
             <MenuItem onClick={e => this.OpenAuth(ISLOG)}>Авторизация</MenuItem>
             <MenuItem onClick={e => this.OpenAuth(ISREG)}>Регистрация</MenuItem>
           </NavDropdown>
-        </Nav>
+        </ul>
       </div>
     );
   }
 }
 const mapStateProps = state => {
-  return {};
+  return {
+    orderItems: state.cartReducer.itemsCount
+  };
 };
 
 export default connect(mapStateProps, { openAuth })(ShopNavbarLinks);

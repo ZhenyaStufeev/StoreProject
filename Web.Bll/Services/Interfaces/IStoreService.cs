@@ -12,5 +12,6 @@ namespace Web.Bll.Interfaces
         Task<object> GetProduct(ProductRequest model);
         Task<IEnumerable<FNameViewModel>> GetFiltersByCategoryId(string id);
         Task<SelectedProduct> GetProductById(string Id);
+        Task<IEnumerable<ProductViewModel>> GetProductByIds(string[] ids);
     }
 }

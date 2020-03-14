@@ -4,7 +4,8 @@ import { NavItem, Nav, NavDropdown, MenuItem } from "react-bootstrap";
 import {
   loadProducts,
   loadFilters,
-  updateCategoryName
+  updateCategoryName,
+  AddIdToCart
 } from "utils/storecontrol";
 import { getCategoryNameById } from "utils/actions";
 import { connect } from "react-redux";
@@ -79,12 +80,17 @@ class Products extends Component {
             </Link>
             <div className="product-list">
               <Link to={"sproduct?" + item.id}>
-                <p style={{color: 'black'}}>{item.name}</p>
+                <p style={{ color: "black" }}>{item.name}</p>
               </Link>
               <span className="price">{item.price} грн</span>
-              <Link to={"sproduct?" + item.id} className="item-button">
+              <button
+                onClick={e => {
+                  this.props.AddIdToCart(item.id);
+                }}
+                className="item-button"
+              >
                 В корзину
-              </Link>
+              </button>
             </div>
             <div className="more-info"></div>
           </div>
@@ -120,12 +126,16 @@ const mapStateProps = state => {
     orderType: state.productReducer.orderType,
     currentMaxPrice: state.productReducer.currentMaxPrice,
     currentMinPrice: state.productReducer.currentMinPrice,
-    selectedFilters: state.productReducer.selectedFilters
+    selectedFilters: state.productReducer.selectedFilters,
+    // prIds: state.cartReducer.prIds
   };
 };
 
 export default withRouter(
-  connect(mapStateProps, { loadProducts, loadFilters, updateCategoryName })(
-    Products
-  )
+  connect(mapStateProps, {
+    loadProducts,
+    loadFilters,
+    updateCategoryName,
+    AddIdToCart
+  })(Products)
 );
