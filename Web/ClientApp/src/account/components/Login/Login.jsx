@@ -5,12 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 // import { login, LogModal } from '../methods/actions';
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import classnames from "classnames";
 import { ISLOG, ISREG } from "store/types";
 import { openAuth } from "utils/storecontrol";
-Modal.setAppElement("#root");
+import { login, register, Translate } from "utils/actions";
 
+Modal.setAppElement("#root");
+const loadGif = <img className="gif-loading" src={require("../../../images/loading.gif")} alt=""/>
 class LoginModal extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ class LoginModal extends React.Component {
       email: "",
       password: "",
       confirmpassword: "",
+      username: "",
       isLoading: false,
       errors: [],
       confirmisvalid: true
@@ -32,27 +34,66 @@ class LoginModal extends React.Component {
   closeModal = e => {
     this.props.openAuth(false);
     this.setState({
-        email: "",
-        password: "",
-        confirmpassword: "",
-        isLoading: false,
-        errors: [],
-        confirmisvalid: true
+      email: "",
+      password: "",
+      confirmpassword: "",
+      isLoading: false,
+      errors: [],
+      confirmisvalid: true
     });
   };
 
-  SendLoginForm = e => {
+  SendLoginForm = (e) => {
     e.preventDefault();
+    this.setState({isLoading:true, errors: []})
     let formIsValid = true;
 
     if (formIsValid === false) {
       this.updateAnimation({ element_id: "input-form", timeout: 750 });
+    }
+    if (this.props.TypeAuth === ISLOG) {
+      let logModel = {
+        Email: this.state.email,
+        Password: this.state.password
+      };
+      let res = login(logModel);
+      res.then(
+        data => {
+          console.log(data);
+        },
+        err => {
+          console.log(err.response.data.errors);
+          Translate({words: err.response.data.errors}).then((res) => this.setState({errors: res, isLoading:false}))
+        }
+      );
+    } else {
+      let regModel = {
+        UserName: this.state.username,
+        Email: this.state.email,
+        Password: this.state.password,
+        ConfirmPassword: this.state.confirmpassword
+      };
+      let res = register(regModel);
+      res.then(
+        data => {
+          console.log(data.response);
+        },
+        async(err) => {
+          console.log(err.response.data.errors);
+          let dt = await Translate({words: err.response.data.errors});
+          this.setState({errors: dt, isLoading:false})
+        }
+      );
     }
   };
 
   OnChange = element => {
     let Value = element.target.value;
     switch (element.target.id) {
+      case "username": {
+        this.setState({ username: Value });
+        break;
+      }
       case "email": {
         this.setState({ email: Value });
         break;
@@ -63,8 +104,7 @@ class LoginModal extends React.Component {
       }
       case "confirmpassword": {
         let isValid = false;
-        if(Value === this.state.password)
-            isValid = true;
+        if (Value === this.state.password) isValid = true;
         this.setState({ confirmpassword: Value, confirmisvalid: isValid });
         break;
       }
@@ -85,7 +125,9 @@ class LoginModal extends React.Component {
           className="shadow modal-window fading"
         >
           <div className="modal-header">
+          {this.props.isOpen && this.state.isLoading === true ? loadGif : ""}
             <div className="modal-auth-info">
+            
               <h5>
                 <div>
                   <span style={{ textDecoration: "underline" }}>
@@ -111,9 +153,11 @@ class LoginModal extends React.Component {
                 className="text-danger container"
               >
                 <ul>
-                  <li>Указаный логин/пароль являются неверными.</li>
+                  {this.state.errors.map(item => {
+                    return <li>{item}</li>
+                  })}
                 </ul>
-              </span>
+              </span> 
             </div>
 
             <button
@@ -138,6 +182,13 @@ class LoginModal extends React.Component {
                   onChange={this.OnChange}
                   placeholder="Почта"
                 />
+                 {this.props.TypeAuth === ISREG ? <input
+                  type="text"
+                  id="username"
+                  className="form-control"
+                  onChange={this.OnChange}
+                  placeholder="Имя пользователя"
+                /> : ""}
                 <input
                   type="password"
                   id="password"
@@ -145,21 +196,30 @@ class LoginModal extends React.Component {
                   onChange={this.OnChange}
                   placeholder="Пароль"
                 />
-                {this.props.TypeAuth === ISREG ? (<div>
-                <input
-                  type="password"
-                  id="confirmpassword"
-                  className={classnames("form-control", this.state.confirmisvalid === false ? "is-invalid" : "")}
-                  onChange={this.OnChange}
-                  placeholder="Подтверждение пароля"
-                />
+                {this.props.TypeAuth === ISREG ? (
+                  <div>
+                    <input
+                      type="password"
+                      id="confirmpassword"
+                      className={classnames(
+                        "form-control",
+                        this.state.confirmisvalid === false ? "is-invalid" : ""
+                      )}
+                      onChange={this.OnChange}
+                      placeholder="Подтверждение пароля"
+                    />
 
-                {this.state.confirmisvalid === false ? (
-                  <div className="invalid-feedback">
-                    Указаные пароли не совпадают
+                    {this.state.confirmisvalid === false ? (
+                      <div className="invalid-feedback">
+                        Указаные пароли не совпадают
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                ) : ""}
-                </div>) : ""}
+                ) : (
+                  ""
+                )}
               </div>
 
               <div className="auth-after-body-inputs">
@@ -170,9 +230,7 @@ class LoginModal extends React.Component {
                     onClick={this.SendLoginForm}
                     href="#"
                   >
-                   {this.props.TypeAuth === ISLOG
-                      ? "Вход"
-                      : "Регистрация"}
+                    {this.props.TypeAuth === ISLOG ? "Вход" : "Регистрация"}
                   </Link>
                 </div>
               </div>

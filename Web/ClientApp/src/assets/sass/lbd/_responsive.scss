@@ -282,15 +282,15 @@
 
         .open .dropdown-menu > li {
             & > a{
-                padding: 15px 15px 5px 50px;
+                padding: 10px 5px 10px 15px;
             }
 
             &:first-child > a{
-                padding: 5px 15px 5px 50px;
+                padding: 10px 5px 10px 15px;
             }
 
             &:last-child > a {
-                padding: 15px 15px 25px 50px;
+                padding: 10px 5px 10px 15px;
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -60,6 +61,14 @@ namespace Web.Controllers
         public async Task<IActionResult> GetProductsToCart([FromBody]string[] productsId)
         {
             var res = await store.GetProductByIds(productsId);
+            return Ok(res);
+        }
+
+        [HttpPost("test")]
+        [Authorize]
+        public async Task<IActionResult> test()
+        {
+            var res = "test";
             return Ok(res);
         }
     }

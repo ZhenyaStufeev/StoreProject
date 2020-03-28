@@ -8,7 +8,7 @@ namespace Web.Bll.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> Register(RegisterModel reg_data);
-        Task<object> Login(LoginModel log_data);
+        Task<ResponceResult> Register(RegisterModel reg_data);
+        Task<ResponceResult> Login(LoginModel log_data);
     }
 }

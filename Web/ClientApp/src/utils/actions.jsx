@@ -1,4 +1,6 @@
 import Axios from "axios";
+import { setAuthorizationToken } from "../utils/setAuthorizationToken.jsx";
+import { CHANGE_LANG } from "store/types";
 const host = window.location.origin;
 
 /*Робота з категориями*/
@@ -92,4 +94,49 @@ export function getCategoryNameById(categoryId, categoryList) {
     }
   });
   return categoryName;
+}
+
+export async function login(data) {
+  let requestHref = host + "/api/Account/login";
+  return await Axios.post(requestHref, data).then(res => {
+    const token = res.data.data[0].token;
+    localStorage.setItem("jwtToken", token);
+    setAuthorizationToken(token);
+  });
+}
+
+export async function register(data) {
+  let requestHref = host + "/api/Account/register";
+  return await Axios.post(requestHref, data).then(res => {
+    return res.data;
+  });
+}
+export function Change_Lang(data) {
+  return dispatch => {
+    dispatch({
+      type: CHANGE_LANG,
+      data
+    });
+  };
+}
+
+export function Translate(data) {//data {lang: <lang>, words: <words>}
+    let mass = data.words;
+    if (data.lang == null)
+      if (localStorage.lang != null) data.lang = localStorage.lang;
+      else data.lang = "US";
+
+    return import(`../resources/${data.lang}.json`).then(res => {
+      let message = res["default"];
+      return mass.map(mes => {
+        let temp = message[mes];
+        if (temp == null) {
+          return mes;
+        }
+        // let obj = {};
+        // obj[mes] = temp;
+        //return obj;
+        return temp;
+      });
+    });
 }

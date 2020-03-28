@@ -23,14 +23,20 @@ namespace Web.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
             var res = await userService.Login(login);
-            return Ok(res);
+            if (res.Succeeded)
+                return Ok(res);
+            else
+                return StatusCode(401, res);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> register([FromBody] RegisterModel reg)
         {
             var res = await userService.Register(reg);
-            return Ok(res);
+            if (res.Succeeded)
+                return Ok(res);
+            else
+                return StatusCode(400, res);
         }
     }
 }

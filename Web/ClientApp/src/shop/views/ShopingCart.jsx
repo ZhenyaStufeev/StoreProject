@@ -20,41 +20,7 @@ class ShopingCart extends Component {
     this.getCurrentProduct = this.getCurrentProduct.bind(this);
     this.countChange = this.countChange.bind(this);
     this.state = {
-      totalPrice: 0,
-      optionsCity: [
-        { value: "Ровно", label: "Ровно" },
-        { value: "Киев", label: "Киев" },
-        { value: "Харьков", label: "Харьков" },
-        { value: "Одеса", label: "Одеса" },
-        { value: "Львов", label: "Львов" },
-        { value: "Олександрия", label: "Олександрия" },
-        { value: "Ивано-Франкивск", label: "Ивано-Франкивск" },
-        { value: "Луцьк", label: "Луцьк" },
-        { value: "Ялта", label: "Ялта" }
-      ],
-      optionsSend: [
-        {
-          value: "1",
-          label: "Отделение 1	ул. Князя Владимира, 109а До 1100 кг"
-        },
-        { value: "2", label: "Отделение 2	ул. Чорновола, 14/16 До 30 кг" },
-        {
-          value: "3",
-          label:
-            "Отделение 3	ул. Дубенская БОС, 1 (возле кафе 'Звёздочка') До 1000 кг"
-        },
-        { value: "4", label: "Отделение 4	ул. Видинская, 5в До 30 кг" },
-        { value: "5", label: "Отделение 5	просп. Мира, 12 До 30 кг" },
-        {
-          value: "6",
-          label: "Отделение 6	ул. Киевская, 44 (возле кафе Мономах) До 30 кг"
-        },
-        {
-          value: "7",
-          label: "Отделение 7	ул. Королева, 6 (авторынок 'Динамо') До 30 кг"
-        },
-        { value: "8", label: "Отделение 8	ул. Киевская, 21 До 30 кг" }
-      ]
+      totalPrice: 0
     };
   }
 
@@ -147,47 +113,7 @@ class ShopingCart extends Component {
         </div>
         {/* <button className="btn btn-success">Оплатить</button> */}
         <br />
-        <div className="pay-info">
-          <div className="select-city">
-            <label>Выберите ваш город: </label>
-            <Select
-              options={this.state.optionsCity}
-              defaultValue={this.state.optionsCity[0]}
-            ></Select>
-          </div>
-          <br />
-          <div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="exampleRadios"
-                id="exampleRadios1"
-                defaultValue="option1"
-                defaultChecked
-              />
-              <label className="form-check-label" htmlFor="exampleRadios1">
-                Самовывоз из Новой Почты
-              </label>
-            </div>
-          </div>
-          <br />
-          <div style={{ maxWidth: "350px" }}>
-            <label>Выберите отдел получения: </label>
-            <Select
-              options={this.state.optionsSend}
-              defaultValue={this.state.optionsSend[0]}
-            ></Select>
-          </div>
-          <br />
-          <div className="user-pay-info">
-            <input
-              className="form-control"
-              placeholder="Номер телефона получателя"
-            />
-            <input className="form-control" placeholder="Ф.И.О получателя" />
-          </div>
-        </div>
+        
         <br />
         <button className="btn btn-success">Подтвердить заказ</button>
         <br />

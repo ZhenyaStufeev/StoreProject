@@ -25,13 +25,41 @@ namespace Business_Layer_Logic.Service
             UserManager = _mn;
             RoleManager = _rm;
         }
-        public async Task<bool> Register(RegisterModel model) //Set to AuthenticationManager
+        public async Task<ResponceResult> Register(RegisterModel model) //Set to AuthenticationManager
         {
+            ResponceResult responce = new ResponceResult();
+            responce.Succeeded = true;
+
+            if (model.Email == null || model.Email.Length <= 3)
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("ERROR_EMAIL_REQUIRED");
+            }
+
+            if (model.Password.Length <= 6 || model.Password == null)
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("ERROR_PASSWORD_LENGTH");
+            }
+
             if (model.Password != model.ConfirmPassword)
-                return false;
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("PWD_CPWD_NOT_MATCH");
+            }
+
+            ApplicationUser findByEmail = await UserManager.FindByEmailAsync(model.Email);
+            if (findByEmail != null)
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("EMAIL_IS_EXISTS");
+            }
+
+            if (responce.Succeeded == false)
+                return responce;
 
             string uName = "";
-            if (model.UserName == null && model.UserName.Length <= 0)
+            if (model.UserName.Length == 0)
             {
                 foreach (char symbol in model.Email)
                 {
@@ -40,35 +68,47 @@ namespace Business_Layer_Logic.Service
                     uName += symbol;
                 }
             }
+            else
+            {
+                uName = model.UserName;
+            }
 
             ApplicationUser user = new ApplicationUser() { UserName = uName, Email = model.Email };
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
-                List<string> errors = new List<string>();
+                responce.Succeeded = false;
                 foreach (var error in result.Errors)
                 {
-                    string error_str = "";
-                    error_str += "Error Code "
-                        + error.Code
-                        + ":  "
-                        + error.Description;
-                    errors.Add(error_str);
+                    string error_str = error.Code; //+ ":  " + error.Description;
+                    responce.Errors.Add(error_str);
                 }
-                return false;
+                return responce;
             }
-            return true;
+            return responce;
         }
-        public async Task<object> Login(LoginModel model) //Set to AuthenticationManager
+        public async Task<ResponceResult> Login(LoginModel model) //Set to AuthenticationManager
         {
+
+            ResponceResult responce = new ResponceResult();
+            responce.Succeeded = true;
+
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
-                return new { succeeded = false, errors = new object[] { "LOGIN_NOT_FOUND" } };
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("LOGIN_NOT_FOUND");
+                return responce;
+            }
 
             bool passIsCorrect = await UserManager.CheckPasswordAsync(user, model.Password);
             if (!passIsCorrect)
-                return new { succeeded = false, errors = new object[] { "INCORRECT_PASSWORD" } };
+            {
+                responce.Succeeded = false;
+                responce.Errors.Add("INCORRECT_PWD");
+                return responce;
+            }
 
             user.SecurityStamp = CreateToken(user);
             UserInfo user_dt = new UserInfo()
@@ -77,8 +117,8 @@ namespace Business_Layer_Logic.Service
                 DisplayName = user.UserName,
                 Token = user.SecurityStamp
             };
-
-            return new { succeeded = true, user_dt };
+            responce.data.Add(user_dt);
+            return responce;
         }
         private string CreateToken(ApplicationUser user)
         {

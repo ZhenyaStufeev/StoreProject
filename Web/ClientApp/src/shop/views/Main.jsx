@@ -18,27 +18,18 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 import Axios from "axios";
-
+import Nova from "shop/api/components/nova";
 class Main extends Component {
-  send() {
-    Axios.post("https://localhost:44330/api/Account/login", {
-      Email: "zhenyastufeev09012001@gmail.com",
-      Password: "fdgdfhgdfg",
-      ConfirmPassword: "gsdfgfdg"
-    });
-  }
 
-  reg()
+  send()
   {
-    Axios.post("https://localhost:44330/api/Account/register", {
-      Email: "zhenyastufeev09012001@gmail.com",
-      Password: "fdgdfhgdfg",
-      ConfirmPassword: "gsdfgfdg"
-    });
+    Axios.post("https://localhost:44330/api/Store/test")
+    .then(item => {console.log(item)});
   }
   render() {
     return (
       <div className="">
+        <Nova/>
         <button onClick={this.send}>Login</button>
       </div>
     );

@@ -1,0 +1,20 @@
+{
+    "ERROR_EMAIL_REQUIRED": "Email is required",
+    "LOGIN": "Sign in",
+    "ERROR_EMAIL_ADDRESS": "Email invalid",
+    "ERROR_PASSWORD_REQUIRED": "Password is required",
+    "NO_CONNECTION": "No connection to server",
+    "ERROR_PASSWORD_LENGTH": "The length of the password must be at least 6 symbols",
+    "SYMBOLS": "Symbols",
+    "PASSWORD": "Password",
+    "EMAIL": "Email",
+    "SIGNUP": "Sign Up",
+    "LOGIN_NOT_FOUND" : "You entered the wrong username or password",
+    "PasswordRequiresLower" : "Password require lowercase letters",
+    "PasswordRequiresUpper" : "Password require upercase letters",
+    "PasswordRequiresNonAlphanumeric" : "Passwords must have at least one non alphanumeric character",
+    "EMAIL_IS_EXISTS": "This email exists",
+    "DuplicateUserName" : "This user name exists",
+    "PWD_CPWD_NOT_MATCH": "Password and confirmation password do not match",
+    "INCORRECT_PWD": "Incorrect password"
+}

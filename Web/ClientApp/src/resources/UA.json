@@ -1,0 +1,20 @@
+{
+    "ERROR_EMAIL_REQUIRED": "Це поле є обов'язковим для вводу",
+    "LOGIN": "Вхід",
+    "ERROR_EMAIL_ADDRESS": "Пошта не є коректно введеною",
+    "ERROR_PASSWORD_REQUIRED": "Пароль є обов'язковим",
+    "NO_CONNECTION": "Сервер не відповідає",
+    "ERROR_PASSWORD_LENGTH": "Довжина пароль має бути не менше 6 символів",
+    "SYMBOLS": "Символів",
+    "PASSWORD": "Пароль",
+    "EMAIL": "Пошта",
+    "SIGNUP": "Реєстарція",
+    "LOGIN_NOT_FOUND" : "Користувач з таким логіном і паролем не знайдений",
+    "PasswordRequiresLower" : "В паролі повинні бути маленькі літери",
+    "PasswordRequiresUpper" : "В паролі повинні бути великі літери",
+    "PasswordRequiresNonAlphanumeric" : "В паролі повинні бути не буквенно-цифрові символи",
+    "EMAIL_IS_EXISTS": "Користувач с такою почтовою скринькою вже існує",
+    "DuplicateUserName" : "Користувач з таким іменем вже існує",
+    "PWD_CPWD_NOT_MATCH": "Пароль и підтвердження пароля не співпадає",
+    "INCORRECT_PWD": "Не вірний пароль"
+}

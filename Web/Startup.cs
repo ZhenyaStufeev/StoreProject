@@ -58,6 +58,7 @@ namespace Web
                     ValidateIssuerSigningKey = true
                 };
             });
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -90,6 +91,8 @@ namespace Web
             app.UseStaticFiles(staticFiles);
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

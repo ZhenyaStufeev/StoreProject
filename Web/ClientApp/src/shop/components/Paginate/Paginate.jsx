@@ -10,7 +10,7 @@ class Paginate extends Component {
 
   handlePageClick(e) {
     window.location.hash = e.selected+1;
-    window.scrollTo(0,0);
+    // window.scrollTo(0,0);
   }
 
   render() {

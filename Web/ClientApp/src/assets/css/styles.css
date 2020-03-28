@@ -1634,6 +1634,8 @@
   border:0.5px solid silver;
   border-radius: 5px;
   padding: 15px;
+  position: relative;
+  max-width: 385px;
 }
 
 .select-city
@@ -1644,4 +1646,15 @@
 .user-pay-info
 {
   max-width: 350px;
+}
+
+.gif-loading
+{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  z-index: 10000000;
+  top: 0px;
+  left: 0px;
 }

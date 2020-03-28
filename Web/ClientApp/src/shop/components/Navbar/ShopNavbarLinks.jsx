@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { ISLOG, ISREG } from "store/types";
 import { openAuth } from "utils/storecontrol";
 // import {closeSidebar} from "utils/actions";
+import Localize from "components/flags-select/flags-select";
 import {resetMobileMenu, closeSidebar} from "utils/actions";
 class ShopNavbarLinks extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class ShopNavbarLinks extends Component {
             <MenuItem onClick={e => this.OpenAuth(ISLOG)}>Авторизация</MenuItem>
             <MenuItem onClick={e => this.OpenAuth(ISREG)}>Регистрация</MenuItem>
           </NavDropdown>
+          <Localize/>
         </ul>
       </div>
     );

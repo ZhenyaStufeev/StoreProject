@@ -13,8 +13,10 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using Web.Bll.Interfaces;
 using Web.Bll.Services;
+using Web.Bll.Services.Interfaces;
 
 namespace Web.Bll.Utils
 {
@@ -41,9 +43,13 @@ namespace Web.Bll.Utils
                     .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>()
                     .AddEntityFrameworkStores<ApplicationContext>()
                     .AddDefaultTokenProviders();
-            
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<HttpClient, HttpClient>();
+            services.AddScoped<IApiService, ApiService>();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         private static string GetConnectionString()

@@ -10,7 +10,13 @@ import { withRouter } from "react-router";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
-
+const loadGif = (
+  <img
+    className="gif-loading"
+    src={require("../../../images/loading.gif")}
+    alt=""
+  />
+);
 class Filter extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +24,8 @@ class Filter extends Component {
       checkedId: [],
       currentValue: [props.currentMinPrice, props.currentMaxPrice],
       minPrice: props.minPrice,
-      maxPrice: props.maxPrice
+      maxPrice: props.maxPrice,
+      isLoading: false
     };
     this.checkBoxOnClick = this.checkBoxOnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -28,7 +35,10 @@ class Filter extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.minPrice !== prevState.minPrice || nextProps.maxPrice !== prevState.maxPrice)
+    if (
+      nextProps.minPrice !== prevState.minPrice ||
+      nextProps.maxPrice !== prevState.maxPrice
+    )
       return {
         currentValue: [nextProps.minPrice, nextProps.maxPrice],
         minPrice: nextProps.minPrice,
@@ -37,7 +47,7 @@ class Filter extends Component {
 
     return {
       currentValue: [nextProps.currentMinPrice, nextProps.currentMaxPrice]
-    }
+    };
   }
 
   OpenOrHide(e) {
@@ -61,6 +71,7 @@ class Filter extends Component {
   }
 
   checkBoxOnClick = e => {
+    this.setState({ isLoading: true });
     let ids = this.state.checkedId;
     if (e.target.checked == true) {
       ids.push(e.target.id);
@@ -72,23 +83,28 @@ class Filter extends Component {
       });
     }
     window.location.hash = "1";
-    this.props.loadProducts(
-      ids,
-      this.state.currentValue[0],
-      this.state.currentValue[1],
-      this.props.orderType
-    );
+    this.props
+      .loadProducts(
+        ids,
+        this.state.currentValue[0],
+        this.state.currentValue[1],
+        this.props.orderType
+      )
+      .then(() => this.setState({ isLoading: false }));
     this.setState({ checkedId: ids });
   };
 
   OnClickSetPrice() {
+    this.setState({ isLoading: true });
     window.location.hash = "1";
-    this.props.loadProducts(
-      this.state.checkedId,
-      this.state.currentValue[0],
-      this.state.currentValue[1],
-      this.props.orderType
-    );
+    this.props
+      .loadProducts(
+        this.state.checkedId,
+        this.state.currentValue[0],
+        this.state.currentValue[1],
+        this.props.orderType
+      )
+      .then(() => this.setState({ isLoading: false }));
   }
 
   OnClick() {
@@ -100,23 +116,40 @@ class Filter extends Component {
   }
 
   OnChangeInputs(e) {
+    let val = e.target.value;
     let range = this.state.currentValue;
 
-    let parsedVal = parseInt(e.target.value);
+    let parsedVal = parseInt(val);
     let selectNum = 0;
+
+    if (parsedVal < 0 || isNaN(parsedVal)) {
+      parsedVal = 0;
+    }
+
     if (e.target.id === "max") selectNum = 1;
+
     if (parsedVal > this.state.maxPrice) range[selectNum] = this.state.maxPrice;
     else range[selectNum] = parsedVal;
 
-    this.setState({ currentValue: range });
+    this.props.updateCurrentPrice(range[0], range[1]);
   }
 
-  componentDidUpdate()
-  {
-    this.props.updateCurrentPrice(this.state.currentValue[0], this.state.currentValue[1]);
+  componentDidUpdate() {
+    this.props.updateCurrentPrice(
+      this.state.currentValue[0],
+      this.state.currentValue[1]
+    );
   }
+
   render() {
-    
+    if (document.getElementById("gif-loading") == null) {
+      var node = document.createElement("img");
+      node.src = require("../../../images/loading.gif");
+      node.className = "gif-loading";
+      node.id = "gif-loading";
+      document.body.appendChild(node);
+    }
+
     return (
       <div
         className={
@@ -125,6 +158,7 @@ class Filter extends Component {
             : "main-div --hidden"
         }
       >
+        {this.state.isLoading === true ? loadGif : ""}
         <div
           onClick={this.OnClick}
           className={
@@ -165,7 +199,8 @@ class Filter extends Component {
                     />
                     <div className="inputs-price">
                       <input
-                        type="number"
+                        type="text"
+                        pattern="[0-9]"
                         className="form-control"
                         id="min"
                         value={this.state.currentValue[0]}
@@ -173,7 +208,8 @@ class Filter extends Component {
                       ></input>
                       <i className="fa fa-minus" aria-hidden="true"></i>
                       <input
-                        type="number"
+                        type="text"
+                        pattern="[0-9]"
                         className="form-control"
                         value={this.state.currentValue[1]}
                         onChange={this.OnChangeInputs}
@@ -235,7 +271,8 @@ const mapStateProps = state => {
     minPrice: state.productReducer.minPrice,
     currentMaxPrice: state.productReducer.currentMaxPrice,
     currentMinPrice: state.productReducer.currentMinPrice,
-    orderType: state.productReducer.orderType
+    orderType: state.productReducer.orderType,
+    selectedIds: state.productReducer.selectedFilters
   };
 };
 
