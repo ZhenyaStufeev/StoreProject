@@ -12,6 +12,9 @@ namespace Web.Bll.Interfaces
         Task<object> GetProduct(ProductRequest model);
         Task<IEnumerable<FNameViewModel>> GetFiltersByCategoryId(string id);
         Task<SelectedProduct> GetProductById(string Id);
-        Task<IEnumerable<ProductViewModel>> GetProductByIds(string[] ids);
+        Task<IEnumerable<ProductViewModel>> GetProductsByIds(string[] ids);
+        Task<object> AddProductsToCart(CartRequest model);
+        Task<object> DeleteProductsFromCart(CartRequest model);
+        Task<IEnumerable<ProductViewModel>> GetProductsCartByEmail(string Email);
     }
 }

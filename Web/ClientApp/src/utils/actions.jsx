@@ -101,8 +101,17 @@ export async function login(data) {
   return await Axios.post(requestHref, data).then(res => {
     const token = res.data.data[0].token;
     localStorage.setItem("jwtToken", token);
+    localStorage.setItem("Email", res.data.data[0].email);
+    localStorage.setItem("DisplayName", res.data.data[0].displayName);
     setAuthorizationToken(token);
   });
+}
+
+export function logout() {
+    setAuthorizationToken("");
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("Email");
+    localStorage.removeItem("DisplayName");
 }
 
 export async function register(data) {

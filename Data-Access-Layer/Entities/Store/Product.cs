@@ -11,6 +11,8 @@ namespace Data_Access_Layer.Entities.Store
         public Product()
         {
             Filters = new List<Filter>();
+            Carts = new List<CartToProduct>();
+            Orders = new List<OrderToProduct>();
             DateCreate = DateTime.Now;
         }
         [Key]
@@ -29,6 +31,7 @@ namespace Data_Access_Layer.Entities.Store
         public virtual ICollection<Filter> Filters { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }
-        
+        public List<OrderToProduct> Orders { get; set; }
+        public List<CartToProduct> Carts { get; set; }
     }
 }

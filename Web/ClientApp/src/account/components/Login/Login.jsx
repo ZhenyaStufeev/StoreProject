@@ -60,6 +60,8 @@ class LoginModal extends React.Component {
       res.then(
         data => {
           console.log(data);
+          this.setState({errors: [], isLoading:false})
+          this.closeModal();
         },
         err => {
           console.log(err.response.data.errors);
@@ -76,7 +78,8 @@ class LoginModal extends React.Component {
       let res = register(regModel);
       res.then(
         data => {
-          console.log(data.response);
+          this.setState({errors: [], isLoading:false})
+          this.closeModal();
         },
         async(err) => {
           console.log(err.response.data.errors);

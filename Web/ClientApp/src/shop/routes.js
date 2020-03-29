@@ -16,13 +16,13 @@ const dashboardRoutes = [
     component: SelectedProduct,
     layout: ""
   },
-  {
+  window.localStorage.getItem("Email") != null ? {
     path: "/shopingcart*",
     name: "Корзина",
     icon: "pe-7s-bookmarks",
     component: ShopingCart,
     layout: ""
-  }
+  } : ""
 ];
 
 export default dashboardRoutes;

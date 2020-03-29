@@ -5,12 +5,15 @@ import {
   loadProducts,
   loadFilters,
   updateCategoryName,
-  AddIdToCart
+  AddIdToCart,
+  loadCart,
+  SetDataToCart
 } from "utils/storecontrol";
 import { getCategoryNameById } from "utils/actions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import Paginate from "shop/components/Paginate/Paginate";
+import Axios from "axios";
 class Products extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +24,30 @@ class Products extends Component {
 
     this.renderItems = this.renderItems.bind(this);
     this.updateData = this.updateData.bind(this);
+    this.getCurrentProduct = this.getCurrentProduct.bind(this);
   }
+
+  getCurrentProduct = (id) => {
+    let host = window.location.origin;
+    let requestHref = host + "/api/Store/AddProductsToCart";
+    let model = {
+      Email:  window.localStorage.getItem("Email"),
+      productsIds: [id]
+    }
+    Axios.post(requestHref, model).then(res => {
+      console.log(res);
+      let result = res.data.data.map(item => {
+        return {
+          id : item.id,
+          name : item.name,
+          price : item.price,
+          imagePath: item.imagePath,
+          orderQuantity: 1
+        }
+      });
+      this.props.SetDataToCart(result);
+    });
+  };
 
   updateData = () => {
     if (this.state.isLoading === false) {
@@ -85,7 +111,7 @@ class Products extends Component {
               <span className="price">{item.price} грн</span>
               <button
                 onClick={e => {
-                  this.props.AddIdToCart(item.id);
+                  this.getCurrentProduct(item.id);
                 }}
                 className="item-button"
               >
@@ -136,6 +162,8 @@ export default withRouter(
     loadProducts,
     loadFilters,
     updateCategoryName,
-    AddIdToCart
+    AddIdToCart,
+    loadCart,
+    SetDataToCart
   })(Products)
 );

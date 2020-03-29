@@ -30,23 +30,29 @@ class ShopNavbarLinks extends Component {
         <span className="notification-text">Корзина</span>
       </div>
     );
+    const user = (
+      <div className="">
+        <i className="fa pe-7s-users" />
+        <span className="notification-text">{window.localStorage.getItem("DisplayName")}</span>
+      </div>
+    );
+    let auth = (<NavDropdown
+    eventKey={2}
+    title="Личный кабинет"
+    id="basic-nav-dropdown-right"
+    >
+      <MenuItem onClick={e => this.OpenAuth(ISLOG)}>Авторизация</MenuItem>
+      <MenuItem onClick={e => this.OpenAuth(ISREG)}>Регистрация</MenuItem>
+    </NavDropdown>);
     return (
-      
       <div>
         <Nav>
           <Categories {...this.props} />
         </Nav>
 
         <ul className="nav navbar-nav navbar-right">
-          <li role="presentation"><NavLink className="shoping-catr" to="/shopingcart">{notification}</NavLink></li>
-          <NavDropdown
-            eventKey={2}
-            title="Личный кабинет"
-            id="basic-nav-dropdown-right"
-          >
-            <MenuItem onClick={e => this.OpenAuth(ISLOG)}>Авторизация</MenuItem>
-            <MenuItem onClick={e => this.OpenAuth(ISREG)}>Регистрация</MenuItem>
-          </NavDropdown>
+          {window.localStorage.getItem("Email") != null ? <li role="presentation"><NavLink className="shoping-catr" to="/shopingcart">{notification}</NavLink></li>: ""}
+          {window.localStorage.getItem("Email") != null ? <li role="presentation"><NavLink to="/">{user}</NavLink></li>: auth}
           <Localize/>
         </ul>
       </div>

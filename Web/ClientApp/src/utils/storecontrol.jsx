@@ -176,4 +176,41 @@ export function UpdateOroductQuantity(id, value)
         });
       }
 }
+
+
+export function loadCart() {
+  let host = window.location.origin;
+  let requestHref = host + "/api/Store/GetCartByEmail/" + window.localStorage.getItem("Email");
+
+  return function(dispatch) {
+    Axios.get(requestHref).then(res => {
+      console.log(res.data);
+      let result = res.data.map(item => {
+        return {
+          id : item.id,
+          name : item.name,
+          price : item.price,
+          imagePath: item.imagePath,
+          orderQuantity: 1
+        }
+      });
+
+      return dispatch({
+        type: SETTOCART,
+        cartList: result
+      });
+      
+    });
+  };
+}
+
+// export function loadCart()
+// {
+//   return function(dispatch) {
+//     return dispatch({
+//           type: SETTOCART,
+//           cartList: items
+//         });
+//       }
+// }
 /* --------------------------------------------------------- */

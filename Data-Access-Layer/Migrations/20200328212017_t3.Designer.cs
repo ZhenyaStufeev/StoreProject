@@ -4,14 +4,16 @@ using Data_Access_Layer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200328212017_t3")]
+    partial class t3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,6 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CartId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -84,8 +83,6 @@ namespace Data_Access_Layer.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -496,13 +493,6 @@ namespace Data_Access_Layer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Data_Access_Layer.Entities.ApplicationUser", b =>
-                {
-                    b.HasOne("Data_Access_Layer.Entities.Store.Cart", "Cart")
-                        .WithMany()
-                        .HasForeignKey("CartId");
-                });
-
             modelBuilder.Entity("Data_Access_Layer.Entities.Store.CartToProduct", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entities.ApplicationUser", null)
@@ -568,7 +558,7 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entities.Store.OrderToProduct", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entities.ApplicationUser", null)
-                        .WithMany("OrderItems")
+                        .WithMany("Orders")
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("Data_Access_Layer.Entities.Store.Order", "OrderOf")

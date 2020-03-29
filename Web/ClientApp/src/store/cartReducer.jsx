@@ -40,7 +40,7 @@ export default function UpdateElements(state = initialState, action={})
         case SETIDSPRODUCTS:
         {
             if(action.prIds != null)
-                return Object.assign({}, state, { prIds:action.prIds, itemsCount: action.prIds.length });
+                return Object.assign({}, state, { prIds:action.prIds  }); //itemsCount: action.prIds.length
             return state;
         }
         case ADDID:
@@ -60,7 +60,7 @@ export default function UpdateElements(state = initialState, action={})
                 {
                     let newList = [].concat(state.prIds);
                     newList.push(item);
-                    return Object.assign({}, state, { prIds:newList, itemsCount: newList.length });
+                    return Object.assign({}, state, { prIds:newList }); //, itemsCount: newList.length
                 }
             }
             return state;

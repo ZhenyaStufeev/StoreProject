@@ -57,18 +57,27 @@ namespace Web.Controllers
             return Ok(res);
         }
 
-        [HttpPost("getproductstocart")]
-        public async Task<IActionResult> GetProductsToCart([FromBody]string[] productsId)
+        [HttpGet("GetCartByEmail/{Email}")]
+        [Authorize]
+        public async Task<IActionResult> GetProductsToCart(string Email)
         {
-            var res = await store.GetProductByIds(productsId);
+            var res = await store.GetProductsCartByEmail(Email);
             return Ok(res);
         }
 
-        [HttpPost("test")]
+        [HttpPost("AddProductsToCart")]
         [Authorize]
-        public async Task<IActionResult> test()
+        public async Task<IActionResult> AddProductsToCart([FromBody] CartRequest model)
         {
-            var res = "test";
+            var res = await store.AddProductsToCart(model);
+            return Ok(res);
+        }
+
+        [HttpPost("DeleteProductsFromCart")]
+        [Authorize]
+        public async Task<IActionResult> DeleteProductsFromCart([FromBody] CartRequest model)
+        {
+            var res = await store.DeleteProductsFromCart(model);
             return Ok(res);
         }
     }

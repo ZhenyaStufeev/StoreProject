@@ -3,6 +3,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import ProductWithPaginate from "shop/components/Products/Products";
 import Paginate from "shop/components/Paginate/Paginate";
 import Filter from "shop/components/Filter/Filter";
+import Nova from "shop/api/components/nova";
 import { connect } from "react-redux";
 import {
   TryOpenFilters,
@@ -30,10 +31,14 @@ class ShopingCart extends Component {
 
   getCurrentProduct = () => {
     let host = window.location.origin;
-    let requestHref = host + "/api/Store/getproductstocart";
-    Axios.post(requestHref, this.props.selectedIds).then(res => {
-      // console.log(res);
-      let result = res.data.map(item => {
+    let requestHref = host + "/api/Store/AddProductsToCart";
+    let model = {
+      Email:  window.localStorage.getItem("Email"),
+      productsIds: this.props.selectedIds
+    }
+    Axios.post(requestHref, model).then(res => {
+      console.log(res);
+      let result = res.data.data.map(item => {
         return {
           id : item.id,
           name : item.name,
@@ -49,6 +54,8 @@ class ShopingCart extends Component {
 
   countChange = (id, value) =>
   {
+    if(value < 1 || isNaN(value))
+      value = 1;
     this.props.UpdateOroductQuantity(id, value);
   }
 
@@ -81,7 +88,7 @@ class ShopingCart extends Component {
               <div className="cart-item" key={index}>
                 <div className="cart-del-bt">{del}</div>
                 <div className="cart-content">
-                  <img src={item.imagePath} class="img-responsive"></img>
+                  <img src={item.imagePath} className="img-responsive"></img>
                   <div className="cart-t">
                     <h4>{item.name}</h4>
                     <div className="cart-price">
@@ -91,6 +98,7 @@ class ShopingCart extends Component {
                   <div className="cart-dt">
                     <div className="cart-count">
                       <input
+                        pattern="[0-9]"
                         style={{ width: "90px" }}
                         className="form-control"
                         value={item.orderQuantity}
@@ -113,7 +121,7 @@ class ShopingCart extends Component {
         </div>
         {/* <button className="btn btn-success">Оплатить</button> */}
         <br />
-        
+        <Nova/>
         <br />
         <button className="btn btn-success">Подтвердить заказ</button>
         <br />

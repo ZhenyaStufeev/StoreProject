@@ -9,7 +9,8 @@ import {
   TryOpenFilters,
   loadProducts,
   ChangeOrderType,
-  AddIdToCart
+  AddIdToCart,
+  SetDataToCart
 } from "utils/storecontrol";
 import Select from "react-select";
 import Axios from "axios";
@@ -27,6 +28,28 @@ class SelectedProduct extends Component {
       props: []
     };
   }
+
+  addtoCart = (id) => {
+    let host = window.location.origin;
+    let requestHref = host + "/api/Store/AddProductsToCart";
+    let model = {
+      Email:  window.localStorage.getItem("Email"),
+      productsIds: [id]
+    }
+    Axios.post(requestHref, model).then(res => {
+      console.log(res);
+      let result = res.data.data.map(item => {
+        return {
+          id : item.id,
+          name : item.name,
+          price : item.price,
+          imagePath: item.imagePath,
+          orderQuantity: 1
+        }
+      });
+      this.props.SetDataToCart(result);
+    });
+  };
 
   componentDidMount = () => {
     this.getCurrentProduct();
@@ -60,7 +83,7 @@ class SelectedProduct extends Component {
           <div className="pr-info">
             <div className="price-block">
               {this.state.price} грн.
-              <button className="btn btn-success pr-bt " onClick={() => this.props.AddIdToCart(this.state.id)}>
+              <button className="btn btn-success pr-bt " onClick={() => this.addtoCart(this.state.id)}>
                 <div className="pe-7s-wallet" />В корзину
               </button>
             </div>
@@ -106,4 +129,4 @@ const mapStateProps = state => {
   return {};
 };
 
-export default connect(mapStateProps, {AddIdToCart})(SelectedProduct);
+export default connect(mapStateProps, {AddIdToCart, SetDataToCart})(SelectedProduct);

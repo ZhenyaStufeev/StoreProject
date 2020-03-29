@@ -142,13 +142,13 @@ class Filter extends Component {
   }
 
   render() {
-    if (document.getElementById("gif-loading") == null) {
-      var node = document.createElement("img");
-      node.src = require("../../../images/loading.gif");
-      node.className = "gif-loading";
-      node.id = "gif-loading";
-      document.body.appendChild(node);
-    }
+    // if (document.getElementById("gif-loading") == null) {
+    //   var node = document.createElement("img");
+    //   node.src = require("../../../images/loading.gif");
+    //   node.className = "gif-loading";
+    //   node.id = "gif-loading";
+    //   document.body.appendChild(node);
+    // }
 
     return (
       <div

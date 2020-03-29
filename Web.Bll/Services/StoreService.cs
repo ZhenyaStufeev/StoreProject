@@ -91,11 +91,12 @@ namespace Web.Bll.Services
                    DateCreate = fProducts.DateCreate,
                    Quantity = fProducts.Quantity,
                    ImagePath = fProducts.ImagePath
-               });
-            if(model.orderType != null)
+               }).AsEnumerable();
+
+            if (model.orderType != null)
                 FilteredProducts = SetPriceSort(FilteredProducts, model.orderType);
 
-            var info = Selector.CreateSelector(model.page, await FilteredProducts.CountAsync());
+            var info = Selector.CreateSelector(model.page, FilteredProducts.Count());
 
             FilteredProducts = FilteredProducts.Skip(info.beginCount)
                                .Take(info.count);
@@ -103,7 +104,7 @@ namespace Web.Bll.Services
             return new { dto = FilteredProducts, totalPages = info.totalPages, minPrice, maxPrice };
         }
 
-        private IQueryable<ProductViewModel> SetPriceSort(IQueryable<ProductViewModel> FilteredProducts, string sorttype)
+        private IEnumerable<ProductViewModel> SetPriceSort(IEnumerable<ProductViewModel> FilteredProducts, string sorttype)
         {
             switch (sorttype)
             {
@@ -132,7 +133,7 @@ namespace Web.Bll.Services
                                     FName = pr_f.FilterNameOf.Name,
                                     FValueId = pr_f.FilterValueId,
                                     FValue = pr_f.FilterValueOf.Name
-                                });
+                                }).AsEnumerable();
 
             var groups = query.GroupBy(filter => (new { Id = filter.FNameId, Name = filter.FName }))
                               .OrderBy(x => x.Key.Name);
@@ -174,7 +175,7 @@ namespace Web.Bll.Services
                 FName = filter.FilterName,
                 FValueId = filter.FilterValueId,
                 FValue = filter.FilterValue
-            });
+            }).AsEnumerable();
 
             var groupNames = query.GroupBy(filter => (new { Id = filter.FNameId, Name = filter.FName }))
                                 .OrderBy(x => x.Key.Name);
@@ -201,9 +202,7 @@ namespace Web.Bll.Services
         }
 
         public async Task<SelectedProduct> GetProductById(string Id)
-        { 
-
-
+        {
             var productQuery = await db.Products.FirstOrDefaultAsync(p => p.Id.ToString() == Id);
 
             SelectedProduct prdto = new SelectedProduct()
@@ -220,16 +219,16 @@ namespace Web.Bll.Services
                                         .Include(f => f.FilterNameOf);
 
             prdto.Props = filterQuery.Select(f => new PropsView()
-                                      {
-                                          Name = f.FilterNameOf.Name,
-                                          Value = f.FilterValueOf.Name
-                                      }).ToList();
+            {
+                Name = f.FilterNameOf.Name,
+                Value = f.FilterValueOf.Name
+            }).ToList();
 
 
             return prdto;
         }
 
-        public async Task<IEnumerable<ProductViewModel>> GetProductByIds(string[] ids)
+        public async Task<IEnumerable<ProductViewModel>> GetProductsByIds(string[] ids)
         {
             if (ids != null)
             {
@@ -246,6 +245,81 @@ namespace Web.Bll.Services
                 }
             }
             return new List<ProductViewModel>();
+        }
+
+        public async Task<object> AddProductsToCart(CartRequest model)
+        {
+            var user = db.Users.Include(p => p.Cart).Include(p => p.CartItems).Where(u => u.NormalizedEmail == model.Email.ToUpper()).FirstOrDefault();
+            if (user.Cart == null)
+            {
+                user.Cart = new Cart();
+            }
+
+            //var temp = db.CartsToProducts.Where(p=>p.ProductId)
+            var newPr = db.Products.Where(p => model.productsIds.Any(currentId => currentId == p.Id.ToString()));
+
+            //var temp = user.Cart.Products.Where(p => model.productsIds.All(prID => prID == p.ProductId.ToString())).Select(p => p.ProductId);
+            //var newPr = db.Products.Where(p => temp.All(id => id == p.Id));
+
+            foreach (Product pr in newPr)
+            {
+                CartToProduct ctp = new CartToProduct();
+                ctp.CartOf = user.Cart;
+                ctp.ProductOf = pr;
+                user.CartItems.Add(ctp);
+            }
+
+            await db.SaveChangesAsync();
+
+            var items = await GetProductsCartByEmail(user.NormalizedEmail);
+
+            bool empty = false;
+
+            if (items.Count() == 0)
+                empty = true;
+
+            return new { succeeded = true, isEmpty = empty, data = items };
+        }
+
+        public async Task<IEnumerable<ProductViewModel>> GetProductsCartByEmail(string Email)
+        {
+            var user = db.Users.Include(p => p.CartItems).Where(u => u.NormalizedEmail == Email.ToUpper()).FirstOrDefault();
+            var prIds = user.CartItems.Select(p => p.ProductId);
+            var newPr = db.Products.Where(p => prIds.Any(currentId => currentId == p.Id));
+            return await Task.Run(() =>
+            {
+                List<ProductViewModel> returnedPr = new List<ProductViewModel>();
+                foreach (Product pr in newPr)
+                {
+                    returnedPr.Add(
+                            new ProductViewModel()
+                            {
+                                Id = pr.Id,
+                                Name = pr.Name,
+                                ImagePath = pr.ImagePath,
+                                Price = pr.Price
+                            }
+                        );
+                }
+                return returnedPr;
+            });
+        }
+
+        public async Task<object> DeleteProductsFromCart(CartRequest model)
+        {
+            var user = db.Users.Include(p => p.CartItems).Where(u => u.NormalizedEmail == model.Email.ToUpper()).FirstOrDefault();
+            var itemsToDel = user.CartItems.Where(cis => model.productsIds.Any(curID => cis.ProductId.ToString() == curID));
+            db.CartsToProducts.RemoveRange(itemsToDel);
+            await db.SaveChangesAsync();
+
+            var items = await GetProductsCartByEmail(user.NormalizedEmail);
+
+            bool empty = false;
+
+            if (items.Count() == 0)
+                empty = true;
+
+            return new { succeeded = true, isEmpty = empty, data = items };
         }
 
         #region Dispose

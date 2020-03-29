@@ -17,7 +17,9 @@ import ShopLayout from "shop/layouts/Shop.jsx";
 import { Provider } from "react-redux";
 import rootReducer from "store/rootReducer.jsx"
 import {setAuthorizationToken} from "utils/setAuthorizationToken.jsx";
-import {Change_Lang} from "utils/actions";
+import {Change_Lang } from "utils/actions";
+import {loadCart} from "utils/storecontrol"
+import Axios from "axios";
 const store = createStore(
   rootReducer,
   composeWithDevTools(
@@ -26,10 +28,10 @@ const store = createStore(
 );
 
 store.dispatch(Change_Lang());
-
 if(localStorage.jwtToken) {
   setAuthorizationToken(localStorage.jwtToken);
 }
+store.dispatch(loadCart());
 
 ReactDOM.render(
   <BrowserRouter>

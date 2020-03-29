@@ -4,14 +4,16 @@ using Data_Access_Layer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200328190120_t2")]
+    partial class t2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +119,6 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
@@ -127,8 +126,6 @@ namespace Data_Access_Layer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CartId");
 
@@ -498,17 +495,13 @@ namespace Data_Access_Layer.Migrations
 
             modelBuilder.Entity("Data_Access_Layer.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("Data_Access_Layer.Entities.Store.Cart", "Cart")
+                    b.HasOne("Data_Access_Layer.Entities.Store.CartToProduct", "Cart")
                         .WithMany()
                         .HasForeignKey("CartId");
                 });
 
             modelBuilder.Entity("Data_Access_Layer.Entities.Store.CartToProduct", b =>
                 {
-                    b.HasOne("Data_Access_Layer.Entities.ApplicationUser", null)
-                        .WithMany("CartItems")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Data_Access_Layer.Entities.Store.Cart", "CartOf")
                         .WithMany("Products")
                         .HasForeignKey("CartId")
@@ -568,7 +561,7 @@ namespace Data_Access_Layer.Migrations
             modelBuilder.Entity("Data_Access_Layer.Entities.Store.OrderToProduct", b =>
                 {
                     b.HasOne("Data_Access_Layer.Entities.ApplicationUser", null)
-                        .WithMany("OrderItems")
+                        .WithMany("Orders")
                         .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("Data_Access_Layer.Entities.Store.Order", "OrderOf")

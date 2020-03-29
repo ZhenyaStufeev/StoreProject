@@ -20,7 +20,7 @@ namespace Data_Access_Layer.Context
         }
         public ApplicationContext() : base(DefaultConnection())
         {
-            this.Database.Migrate();
+            //this.Database.Migrate();
             DataSeed.Initialize(this);
         }
         private static DbContextOptions<ApplicationContext> DefaultConnection()
@@ -59,6 +59,31 @@ namespace Data_Access_Layer.Context
             builder.Entity<FilterNameGroup>().Property(p => p.FilterNameId).HasAnnotation("ForeignKey", "FilterNameOf");
             builder.Entity<FilterNameGroup>().Property(p => p.FilterValueId).HasAnnotation("ForeignKey", "FilterValueOf");
 
+            //        builder.Entity<OrderToProduct>()
+            //            .HasKey(x => new { x.OrderId, x.ProductId });
+            //        builder.Entity<CartToProduct>()
+            //.HasKey(x => new { x.CartId, x.ProductId });
+
+            builder.Entity<OrderToProduct>()
+                .HasOne(x => x.ProductOf)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.ProductId);
+
+            builder.Entity<OrderToProduct>()
+                .HasOne(x => x.OrderOf)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.OrderId);
+
+            builder.Entity<CartToProduct>()
+                .HasOne(x => x.ProductOf)
+                .WithMany(x => x.Carts)
+                .HasForeignKey(x => x.ProductId);
+
+            builder.Entity<CartToProduct>()
+                .HasOne(x => x.CartOf)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.CartId);
+
             base.OnModelCreating(builder);
         }
         public DbSet<Category> Categories { get; set; }
@@ -68,5 +93,9 @@ namespace Data_Access_Layer.Context
         public DbSet<Filter> Filters { get; set; }
         public DbSet<FilterNameGroup> FilterNameGroups { get; set; }
         public DbSet<VFilterNameGroup> VFilterNameGroups { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<OrderToProduct> OrdersToProducts { get; set; }
+        public DbSet<CartToProduct> CartsToProducts { get; set; }
     }
 }
