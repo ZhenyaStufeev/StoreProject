@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "axios": "^0.21.1",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "chartist": "0.10.1",
     "eslint-plugin-react-hooks": "^2.5.1",
     "iframe": "^1.0.0",
