@@ -157,6 +157,7 @@ class Filter extends Component {
             ? "main-div"
             : "main-div --hidden"
         }
+        
       >
         {this.state.isLoading === true ? loadGif : ""}
         <div

@@ -128,7 +128,7 @@ class Products extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{width:"100%"}}>
         <div className={this.state.isLoading === true ? "--open-side" : ""} />
         <ol className="products" style={{ marginRight: "10px" }}>
           {this.renderItems()}

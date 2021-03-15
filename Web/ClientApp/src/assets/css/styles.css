@@ -368,6 +368,7 @@
   font-size: 12px;
   line-height: 28px;
   transition: .3s ease-in;
+  border: 0;
 }
 
 .product-item:hover .item-button {
@@ -768,7 +769,8 @@
   .main-div {
     width: auto;
     top: 0;
-    height: 100vh;
+    /*height: 100vh;*/
+    margin-bottom: 5px;
     z-index: 10;
     /* position: fixed; */
   }

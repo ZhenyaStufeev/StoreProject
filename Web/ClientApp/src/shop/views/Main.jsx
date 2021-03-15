@@ -26,6 +26,7 @@ class Main extends Component {
         <div className="main-title">
           <p></p>
           <p></p>
+          <h1>Привет</h1>
           <h2><b>Все необхідне для автомобіля на {window.location.host}</b></h2>
           <br/>
           <p></p>

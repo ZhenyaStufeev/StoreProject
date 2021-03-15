@@ -37,16 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Configuration.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Configuration.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Web.Bll\Web.Bll.csproj" />
   </ItemGroup>
 

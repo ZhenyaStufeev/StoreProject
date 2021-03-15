@@ -17,7 +17,7 @@ namespace Data_Access_Layer.Migrations.Seeds
         {
             bool AccessSeed = context.Database.EnsureCreated(); //true
 
-            if (AccessSeed == true)
+            if (AccessSeed == false)
             {
                 string codeBase = Assembly.GetExecutingAssembly().CodeBase;
                 UriBuilder uri = new UriBuilder(codeBase);
